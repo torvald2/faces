@@ -2,6 +2,9 @@ package adaptors
 
 import (
 	"testing"
+	"time"
+
+	"atbmarket.comfaceapp/models"
 
 	"github.com/joho/godotenv"
 )
@@ -51,4 +54,36 @@ func TestGetImage(t *testing.T) {
 		t.Errorf("Data is empty")
 	}
 
+}
+
+func TestNewJornalRecord(t *testing.T) {
+	if err := godotenv.Load("../.env"); err != nil {
+		t.Errorf("failed to load env")
+	}
+	store := GetDB()
+	jornal := models.JornalOperation{
+		UserId:        1,
+		OperationDate: time.Now(),
+		OperationType: 1,
+	}
+	if err := store.NewJornalRecord(jornal); err != nil {
+		t.Errorf("Error in insert jornal operation %v", err)
+	}
+}
+
+func TestLoadRequest(t *testing.T) {
+	if err := godotenv.Load("../.env"); err != nil {
+		t.Errorf("failed to load env")
+	}
+	store := GetDB()
+	request := models.BadRequest{
+		UserId:          1,
+		RecognizedUsers: []int{1, 2, 3},
+		CurrentFace:     []byte{1, 2, 3},
+		RecognizeTime:   time.Now(),
+		ErrorType:       1,
+	}
+	if err := store.LogBadRequest(request); err != nil {
+		t.Errorf("Error in insert bad request operation %v", err)
+	}
 }
