@@ -37,3 +37,18 @@ func TestGetAllProfiles(t *testing.T) {
 	}
 
 }
+
+func TestGetImage(t *testing.T) {
+	if err := godotenv.Load("../.env"); err != nil {
+		t.Errorf("failed to load env")
+	}
+	store := GetDB()
+	data, err := store.GetImage(4)
+	if err != nil {
+		t.Errorf("Get image err %v", err)
+	}
+	if len(data) == 0 {
+		t.Errorf("Data is empty")
+	}
+
+}

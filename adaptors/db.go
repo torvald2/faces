@@ -2,6 +2,7 @@ package adaptors
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 	"sync"
 
@@ -60,6 +61,26 @@ func (s Store) GetAllProfiles() (profiles []models.Profile, err error) {
 		profiles = append(profiles, profile)
 	}
 	return
+}
+
+func (s Store) GetImage(profileId int) (data []byte, err error) {
+	var rawData interface{}
+	stmt, err := s.db.Prepare("SELECT data FROM pictures WHERE profile_id=$1 ")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	row := stmt.QueryRow(profileId)
+	err = row.Scan(&rawData)
+	if err != nil {
+		return
+	}
+	data, ok := rawData.([]byte)
+	if !ok {
+		return nil, fmt.Errorf("Type assertion problem interface{} to []byte")
+	}
+	return
+
 }
 
 func createTables(db *sql.DB) {
