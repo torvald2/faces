@@ -46,8 +46,14 @@ func (s Store) CreateProfile(name string, image []byte, descriptor []float32, sh
 
 }
 
-func (s Store) GetAllProfiles() (profiles []models.Profile, err error) {
-	rows, err := s.db.Query("SELECT id, descriptor, name, shop_num, created_date FROM profiles")
+func (s Store) GetShopProfiles(shopId int) (profiles []models.Profile, err error) {
+	stmt, err := s.db.Prepare("SELECT id, descriptor, name, shop_num, created_date FROM profiles WHERE shop_num=$1")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(shopId)
 	if err != nil {
 		return
 	}

@@ -26,12 +26,12 @@ func TestStore_CreateProfile(t *testing.T) {
 
 }
 
-func TestGetAllProfiles(t *testing.T) {
+func TestGetShopProfiles(t *testing.T) {
 	if err := godotenv.Load("../.env"); err != nil {
 		t.Errorf("failed to load env")
 	}
 	store := GetDB()
-	profiles, err := store.GetAllProfiles()
+	profiles, err := store.GetShopProfiles(1)
 	if err != nil {
 		t.Errorf("An error occured during load profiles %v", err)
 	}
