@@ -5,6 +5,8 @@ import (
 	"os"
 	"sync"
 
+	"atbmarket.comfaceapp/models"
+
 	pg "github.com/lib/pq"
 )
 
@@ -43,9 +45,26 @@ func (s Store) CreateProfile(name string, image []byte, descriptor []float32, sh
 
 }
 
+func (s Store) GetAllProfiles() (profiles []models.Profile, err error) {
+	rows, err := s.db.Query("SELECT id, descriptor, name, shop_num, created_date FROM profiles")
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		profile := models.Profile{}
+		err = rows.Scan(&profile.Id, pg.Array(&profile.Descriptor), &profile.Name, &profile.ShopNum, &profile.CreatedDate)
+		if err != nil {
+			return
+		}
+		profiles = append(profiles, profile)
+	}
+	return
+}
+
 func createTables(db *sql.DB) {
 	tables := map[string]string{
-		"profiles":    "CREATE TABLE IF NOT EXISTS profiles (id SERIAL PRIMARY KEY ,descriptor double precision[] not null, name text not null,shop_num int NOT NULL, created_date time not null DEFAULT NOW())",
+		"profiles":    "CREATE TABLE IF NOT EXISTS profiles (id SERIAL PRIMARY KEY ,descriptor double precision [] not null, name text not null,shop_num int NOT NULL, created_date time not null DEFAULT NOW())",
 		"pictures":    "CREATE TABLE IF NOT EXISTS pictures (id SERIAL PRIMARY KEY ,profile_id INT, data bytea NOT NULL)",
 		"workjornal":  "CREATE TABLE IF NOT EXISTS workjornal (id SERIAL  PRIMARY KEY, profile_id INT NOT NULL, operation_date TIME NOT NULL, created_date time not null DEFAULT NOW())",
 		"badRequests": "CREATE TABLE IF NOT EXISTS badrequest (id SERIAL  PRIMARY KEY, profile_id INT, recognized_profiles INT[], current_face bytea, error_type INT,recognized_time time, created_date time not null DEFAULT NOW() )",
