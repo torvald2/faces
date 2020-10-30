@@ -10,6 +10,7 @@ const (
 	NotMe BadRequestType = iota
 	MultipleRecognized
 	NotRecognized
+	NoFace
 )
 
 type BadRequest struct {
@@ -17,5 +18,7 @@ type BadRequest struct {
 	RecognizedUsers []int
 	CurrentFace     []byte
 	RecognizeTime   time.Time
+	Shop            int
+	RequestId       string
 	ErrorType       BadRequestType
 }

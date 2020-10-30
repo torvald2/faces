@@ -82,6 +82,8 @@ func TestLoadRequest(t *testing.T) {
 		CurrentFace:     []byte{1, 2, 3},
 		RecognizeTime:   time.Now(),
 		ErrorType:       1,
+		Shop:            1,
+		RequestId:       "123",
 	}
 	if err := store.LogBadRequest(request); err != nil {
 		t.Errorf("Error in insert bad request operation %v", err)
