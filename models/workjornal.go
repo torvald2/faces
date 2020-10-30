@@ -15,4 +15,5 @@ type JornalOperation struct {
 	RecognizedUserID int           `json:"user_id_recognized"`
 	OperationDate    time.Time     `json:"operation_date"`
 	OperationType    OperationType `json:"operation_type"`
+	RequestId        string        `json:"request_id"`
 }
