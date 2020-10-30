@@ -7,6 +7,7 @@ import (
 type faceRecognizer interface {
 	GetUserIDByFace([]byte) (int, error)
 	GetNewFaceDescriptor([]byte) ([]float32, error)
+	GetShopId() int
 }
 
 type profileStore interface {

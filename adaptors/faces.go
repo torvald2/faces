@@ -25,7 +25,8 @@ func (e MultipleMatch) Error() string {
 }
 
 type Recognizer struct {
-	rec *fr.Recognizer
+	rec    *fr.Recognizer
+	shopId int
 }
 
 func (r Recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
@@ -67,7 +68,11 @@ func (r Recognizer) getFace(image []byte) (fr.Face, error) {
 	return faces[0], nil
 }
 
-func NewRecognizer(data []models.Profile) (rec Recognizer, err error) {
+func (r Recognizer) GetShopId() int {
+	return r.shopId
+}
+
+func NewRecognizer(data []models.Profile, shopId int) (rec Recognizer, err error) {
 	var samples []face.Descriptor
 	var avengers []int32
 
@@ -80,7 +85,7 @@ func NewRecognizer(data []models.Profile) (rec Recognizer, err error) {
 		samples = append(samples, floatSliceToDescriptor(v.Descriptor))
 	}
 	tmp_rec.SetSamples(samples, avengers)
-	return Recognizer{tmp_rec}, nil
+	return Recognizer{tmp_rec, shopId}, nil
 }
 
 func floatSliceToDescriptor(points []float64) fr.Descriptor {
