@@ -12,7 +12,7 @@ type faceRecognizer interface {
 
 type profileStore interface {
 	GetProfileById(int) (models.Profile, error)
-	CreateProfile(string, []byte, []float32, int) (int, error)
+	CreateProfile(name string, image []byte, descriptor []float32, shop int) (profileId int, err error)
 }
 
 type imageGetter interface {

@@ -11,6 +11,7 @@ const (
 	MultipleRecognized
 	NotRecognized
 	NoFace
+	UserNotFound
 )
 
 type BadRequest struct {
