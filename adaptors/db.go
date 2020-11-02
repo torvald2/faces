@@ -69,6 +69,20 @@ func (s Store) GetShopProfiles(shopId int) (profiles []models.Profile, err error
 	return
 }
 
+func (s Store) GetProfileById(profileId int) (profile models.Profile, err error) {
+	stmt, err := s.db.Prepare("SELECT id, descriptor, name, shop_num, created_date FROM profiles WHERE id=$1")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(profileId)
+	if err != nil {
+		return
+	}
+	err = row.Scan(&profile.Id, pg.Array(&profile.Descriptor), &profile.Name, &profile.ShopNum, &profile.CreatedDate)
+	return
+}
 func (s Store) GetImage(profileId int) (data []byte, err error) {
 	var rawData interface{}
 	stmt, err := s.db.Prepare("SELECT data FROM pictures WHERE profile_id=$1 ")

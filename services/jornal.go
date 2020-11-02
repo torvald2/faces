@@ -4,7 +4,7 @@ import (
 	"atbmarket.comfaceapp/models"
 )
 
-func RegisterJornalOperation(j jornalRecorder, log logger, operation models.JornalOperation) error {
+func RegisterJornalOperation(j JornalRecorder, log Logger, operation models.JornalOperation) error {
 	if operation.UserId != operation.RecognizedUserID {
 		go func() {
 			log.LogBadRequest(models.BadRequest{

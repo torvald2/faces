@@ -5,7 +5,7 @@ import (
 	"atbmarket.comfaceapp/models"
 )
 
-func RecognizeFace(fr faceRecognizer, ps profileStore, log logger, image []byte, requestId string) (profile models.Profile, err error) {
+func RecognizeFace(fr FaceRecognizer, ps ProfileStore, log Logger, image []byte, requestId string) (profile models.Profile, err error) {
 	profileId, err := fr.GetUserIDByFace(image)
 
 	if err != nil {
@@ -32,7 +32,7 @@ func RecognizeFace(fr faceRecognizer, ps profileStore, log logger, image []byte,
 	return
 }
 
-func CreateNewProfile(fr faceRecognizer, ps profileStore, log logger, image []byte, name string, shop int, requestId string) (profileId int, err error) {
+func CreateNewProfile(fr FaceRecognizer, ps ProfileStore, log Logger, image []byte, name string, shop int, requestId string) (profileId int, err error) {
 	descriptor, err := fr.GetNewFaceDescriptor(image)
 	if err != nil {
 		go func() {

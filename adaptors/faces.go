@@ -24,12 +24,12 @@ func (e MultipleMatch) Error() string {
 	return "Совпадение с несколькими пользователями"
 }
 
-type Recognizer struct {
+type recognizer struct {
 	rec    *fr.Recognizer
 	shopId int
 }
 
-func (r Recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
+func (r recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
 	face, err := r.getFace(image)
 	if err != nil {
 		return
@@ -41,7 +41,7 @@ func (r Recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
 	}
 	return
 }
-func (r Recognizer) GetNewFaceDescriptor(image []byte) (descriptor []float32, err error) {
+func (r recognizer) GetNewFaceDescriptor(image []byte) (descriptor []float32, err error) {
 	descriptor = make([]float32, 128)
 	face, err := r.getFace(image)
 	if err != nil {
@@ -54,7 +54,7 @@ func (r Recognizer) GetNewFaceDescriptor(image []byte) (descriptor []float32, er
 	return
 }
 
-func (r Recognizer) getFace(image []byte) (fr.Face, error) {
+func (r recognizer) getFace(image []byte) (fr.Face, error) {
 	faces, err := r.rec.Recognize(image)
 	if err != nil {
 		return fr.Face{}, err
@@ -68,11 +68,11 @@ func (r Recognizer) getFace(image []byte) (fr.Face, error) {
 	return faces[0], nil
 }
 
-func (r Recognizer) GetShopId() int {
+func (r recognizer) GetShopId() int {
 	return r.shopId
 }
 
-func NewRecognizer(data []models.Profile, shopId int) (rec Recognizer, err error) {
+func NewRecognizer(data []models.Profile, shopId int) (rec recognizer, err error) {
 	var samples []face.Descriptor
 	var avengers []int32
 
@@ -85,7 +85,7 @@ func NewRecognizer(data []models.Profile, shopId int) (rec Recognizer, err error
 		samples = append(samples, floatSliceToDescriptor(v.Descriptor))
 	}
 	tmp_rec.SetSamples(samples, avengers)
-	return Recognizer{tmp_rec, shopId}, nil
+	return recognizer{tmp_rec, shopId}, nil
 }
 
 func floatSliceToDescriptor(points []float64) fr.Descriptor {

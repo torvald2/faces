@@ -4,25 +4,27 @@ import (
 	"atbmarket.comfaceapp/models"
 )
 
-type faceRecognizer interface {
+type FaceRecognizer interface {
 	GetUserIDByFace([]byte) (int, error)
 	GetNewFaceDescriptor([]byte) ([]float32, error)
 	GetShopId() int
 }
 
-type profileStore interface {
+type ProfileStore interface {
 	GetProfileById(int) (models.Profile, error)
 	GetShopProfiles(shopId int) (profiles []models.Profile, err error)
 	CreateProfile(name string, image []byte, descriptor []float32, shop int) (profileId int, err error)
 }
 
-type imageGetter interface {
+type ImageGetter interface {
 	GetImage(profileId int) (data []byte, err error)
 }
 
-type jornalRecorder interface {
+type JornalRecorder interface {
 	NewJornalRecord(oper models.JornalOperation) error
 }
-type logger interface {
+type Logger interface {
 	LogBadRequest(request models.BadRequest) error
 }
+
+type RecognizeCreator func([]models.Profile, int) (FaceRecognizer, error)
