@@ -1,19 +1,26 @@
 package services
 
 import (
+	"fmt"
+
 	"atbmarket.comfaceapp/adaptors"
 	"atbmarket.comfaceapp/models"
 )
 
-func RecognizeFace(fr FaceRecognizer, ps ProfileStore, log Logger, image []byte, requestId string) (profile models.Profile, err error) {
-	profileId, err := fr.GetUserIDByFace(image)
+func RecognizeFace(ra RecognizeAgregator, ps ProfileStore, image []byte, requestId string, shopId int) (profile models.Profile, err error) {
+	recognozer, ok := ra.GetRecognizer(shopId)
+	err = fmt.Errorf("Для данного магазина нет ни одного профиля")
+	if !ok {
+		return
+	}
+	profileId, err := recognozer.GetUserIDByFace(image)
 
 	if err != nil {
 		go func() {
 			br := models.BadRequest{
 				CurrentFace: image,
 				RequestId:   requestId,
-				Shop:        fr.GetShopId(),
+				Shop:        shopId,
 			}
 			switch err.(type) {
 			case *adaptors.NoFaceError:
@@ -24,7 +31,7 @@ func RecognizeFace(fr FaceRecognizer, ps ProfileStore, log Logger, image []byte,
 				br.ErrorType = models.UserNotFound
 
 			}
-			log.LogBadRequest(br)
+			ps.LogBadRequest(br)
 		}()
 		return
 	}
@@ -32,14 +39,15 @@ func RecognizeFace(fr FaceRecognizer, ps ProfileStore, log Logger, image []byte,
 	return
 }
 
-func CreateNewProfile(fr FaceRecognizer, ps ProfileStore, log Logger, image []byte, name string, shop int, requestId string) (profileId int, err error) {
-	descriptor, err := fr.GetNewFaceDescriptor(image)
+func CreateNewProfile(ra RecognizeAgregator, dg DescriptorGetter, ps ProfileStore, image []byte, name string, shop int, requestId string) (profileId int, err error) {
+
+	descriptor, err := dg.GetNewFaceDescriptor(image)
 	if err != nil {
 		go func() {
 			br := models.BadRequest{
 				CurrentFace: image,
 				RequestId:   requestId,
-				Shop:        fr.GetShopId(),
+				Shop:        shop,
 			}
 			switch err.(type) {
 			case *adaptors.NoFaceError:
@@ -47,10 +55,15 @@ func CreateNewProfile(fr FaceRecognizer, ps ProfileStore, log Logger, image []by
 			case *adaptors.MultipleFaces:
 				br.ErrorType = models.MultipleRecognized
 			}
-			log.LogBadRequest(br)
+			ps.LogBadRequest(br)
 		}()
 		return
 	}
 	profileId, err = ps.CreateProfile(name, image, descriptor, shop)
+	if err != nil {
+		return
+	}
+	err = ra.ReinitRecognizer(shop)
+
 	return
 }

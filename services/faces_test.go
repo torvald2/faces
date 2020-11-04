@@ -8,8 +8,9 @@ import (
 
 type storeMock struct{}
 
-func (s storeMock) GetProfileById(int) (models.Profile, error)                { return models.Profile{Id: 1}, nil }
-func (s storeMock) CreateProfile(string, []byte, []float32, int) (int, error) { return 1, nil }
+func (s storeMock) GetProfileById(int) (models.Profile, error)                        { return models.Profile{Id: 1}, nil }
+func (s storeMock) CreateProfile(string, []byte, []float32, int) (int, error)         { return 1, nil }
+func (s storeMock) GetShopProfiles(shopId int) (profiles []models.Profile, err error) { return }
 
 type recognizerMock struct{}
 

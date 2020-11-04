@@ -24,12 +24,16 @@ func (e MultipleMatch) Error() string {
 	return "Совпадение с несколькими пользователями"
 }
 
-type recognizer struct {
+type Recognizer struct {
 	rec    *fr.Recognizer
 	shopId int
 }
 
-func (r recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
+type descriptor struct {
+	rec *fr.Recognizer
+}
+
+func (r Recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
 	face, err := r.getFace(image)
 	if err != nil {
 		return
@@ -41,12 +45,19 @@ func (r recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
 	}
 	return
 }
-func (r recognizer) GetNewFaceDescriptor(image []byte) (descriptor []float32, err error) {
+func (d descriptor) GetNewFaceDescriptor(image []byte) (descriptor []float32, err error) {
 	descriptor = make([]float32, 128)
-	face, err := r.getFace(image)
+	faces, err := d.rec.Recognize(image)
 	if err != nil {
 		return
 	}
+	if len(faces) == 0 {
+		return descriptor, NoFaceError{}
+	}
+	if len(faces) > 1 {
+		return descriptor, MultipleFaces{}
+	}
+	face := faces[0]
 	desc := face.Descriptor
 	for k, v := range desc {
 		descriptor[k] = v
@@ -54,7 +65,7 @@ func (r recognizer) GetNewFaceDescriptor(image []byte) (descriptor []float32, er
 	return
 }
 
-func (r recognizer) getFace(image []byte) (fr.Face, error) {
+func (r Recognizer) getFace(image []byte) (fr.Face, error) {
 	faces, err := r.rec.Recognize(image)
 	if err != nil {
 		return fr.Face{}, err
@@ -68,11 +79,11 @@ func (r recognizer) getFace(image []byte) (fr.Face, error) {
 	return faces[0], nil
 }
 
-func (r recognizer) GetShopId() int {
+func (r Recognizer) GetShopId() int {
 	return r.shopId
 }
 
-func NewRecognizer(data []models.Profile, shopId int) (rec recognizer, err error) {
+func NewRecognizer(data []models.Profile, shopId int) (rec Recognizer, err error) {
 	var samples []face.Descriptor
 	var avengers []int32
 
@@ -85,7 +96,15 @@ func NewRecognizer(data []models.Profile, shopId int) (rec recognizer, err error
 		samples = append(samples, floatSliceToDescriptor(v.Descriptor))
 	}
 	tmp_rec.SetSamples(samples, avengers)
-	return recognizer{tmp_rec, shopId}, nil
+	return Recognizer{tmp_rec, shopId}, nil
+}
+
+func NewDescriptor() (desc descriptor, err error) {
+	tmp_rec, err := fr.NewRecognizer("../dnnModels")
+	if err != nil {
+		return
+	}
+	return descriptor{tmp_rec}, nil
 }
 
 func floatSliceToDescriptor(points []float64) fr.Descriptor {
