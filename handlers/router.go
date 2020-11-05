@@ -24,9 +24,11 @@ func NewRouter() *mux.Router {
 	newProfileHandler := GetNewFaceHandler(store)
 	imageHandler := GetImageHandler(store)
 	jornalHandler := GetWorkJornalHandler(store, store)
+	profileListHandler := GetProfileHandler(store)
 
 	api := r.PathPrefix("/api/").Subrouter()
 
+	api.Handle("/profile/{id}", profileListHandler).Methods("GET")
 	api.Handle("/profile/{id}", recognizeHandler).Methods("POST")
 	api.Handle("/profile/{id}/new", newProfileHandler).Methods("PUT")
 

@@ -31,6 +31,7 @@ func GetRecognizeFaceHandler(ps services.ProfileStore) http.Handler {
 		}
 		rid, _ := requestid.FromContext(r.Context())
 		profile, err := services.RecognizeFace(ps, bodyBytes, rid, numId)
+		profile.ImageUrl = fmt.Sprintf("/images/%v", profile.Id)
 		if err != nil {
 			respDesc := fmt.Sprintf("Проблема при расспознании лица %v", err)
 			responseWithError(respDesc, w, http.StatusInternalServerError)
@@ -69,7 +70,7 @@ func GetNewFaceHandler(ps services.ProfileStore) http.Handler {
 		profile, err := services.CreateNewProfile(ps, bodyBytes, userName, numId, rid)
 		if err != nil {
 			respDesc := fmt.Sprintf("Проблема при расспознании лица %v", err)
-			responseWithError(respDesc, w, http.StatusInternalServerError)
+			responseWithError(respDesc, w, http.StatusBadRequest)
 		} else {
 			responseOk(w, profile)
 		}
