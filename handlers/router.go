@@ -1,25 +1,38 @@
 package handlers
 
 import (
+	"fmt"
+
 	"atbmarket.comfaceapp/adaptors"
+	"atbmarket.comfaceapp/services"
 	"github.com/gorilla/mux"
 )
 
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 	store := adaptors.GetDB()
-	desc, err := adaptors.NewDescriptor()
+	err := services.NewDescriptor()
 	if err != nil {
 		panic("Create descriptor error")
 	}
-	recognizers, err := adaptors.CreateRecognizers(store)
+	err = services.CreateRecognizers(store)
 	if err != nil {
-		panic("Create recognize agregator error")
+		panic(fmt.Sprintf("Create recognize agregator error, %v", err))
 	}
 
-	recognizeHandler := GetRecognizeFaceHandler(store, recognizers)
+	recognizeHandler := GetRecognizeFaceHandler(store)
+	newProfileHandler := GetNewFaceHandler(store)
+	imageHandler := GetImageHandler(store)
+	jornalHandler := GetWorkJornalHandler(store, store)
 
-	r.Handle("/{id}/recognize", recognizeHandler).Methods("POST")
+	api := r.PathPrefix("/api/").Subrouter()
+
+	api.Handle("/profile/{id}", recognizeHandler).Methods("POST")
+	api.Handle("/profile/{id}/new", newProfileHandler).Methods("PUT")
+
+	api.Handle("/jornal", jornalHandler).Methods("POST")
+
+	r.Handle("/images/{id}", imageHandler).Methods("GET")
 
 	return r
 

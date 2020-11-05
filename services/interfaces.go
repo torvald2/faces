@@ -1,14 +1,8 @@
 package services
 
 import (
-	"atbmarket.comfaceapp/adaptors"
 	"atbmarket.comfaceapp/models"
 )
-
-type FaceRecognizer interface {
-	GetUserIDByFace([]byte) (int, error)
-	GetShopId() int
-}
 
 type ProfileStore interface {
 	GetProfileById(int) (models.Profile, error)
@@ -26,12 +20,4 @@ type JornalRecorder interface {
 }
 type Logger interface {
 	LogBadRequest(request models.BadRequest) error
-}
-
-type RecognizeAgregator interface {
-	GetRecognizer(shopId int) (adaptors.Recognizer, bool)
-	ReinitRecognizer(shopId int) error
-}
-type DescriptorGetter interface {
-	GetNewFaceDescriptor(image []byte) (descriptor []float32, err error)
 }

@@ -3,12 +3,11 @@ package services
 import (
 	"fmt"
 
-	"atbmarket.comfaceapp/adaptors"
 	"atbmarket.comfaceapp/models"
 )
 
-func RecognizeFace(ra RecognizeAgregator, ps ProfileStore, image []byte, requestId string, shopId int) (profile models.Profile, err error) {
-	recognozer, ok := ra.GetRecognizer(shopId)
+func RecognizeFace(ps ProfileStore, image []byte, requestId string, shopId int) (profile models.Profile, err error) {
+	recognozer, ok := recognizers.GetRecognizer(shopId)
 	err = fmt.Errorf("Для данного магазина нет ни одного профиля")
 	if !ok {
 		return
@@ -23,11 +22,11 @@ func RecognizeFace(ra RecognizeAgregator, ps ProfileStore, image []byte, request
 				Shop:        shopId,
 			}
 			switch err.(type) {
-			case *adaptors.NoFaceError:
+			case *NoFaceError:
 				br.ErrorType = models.NoFace
-			case *adaptors.MultipleFaces:
+			case *MultipleFaces:
 				br.ErrorType = models.MultipleRecognized
-			case *adaptors.UserNotFound:
+			case *UserNotFound:
 				br.ErrorType = models.UserNotFound
 
 			}
@@ -39,9 +38,9 @@ func RecognizeFace(ra RecognizeAgregator, ps ProfileStore, image []byte, request
 	return
 }
 
-func CreateNewProfile(ra RecognizeAgregator, dg DescriptorGetter, ps ProfileStore, image []byte, name string, shop int, requestId string) (profileId int, err error) {
+func CreateNewProfile(ps ProfileStore, image []byte, name string, shop int, requestId string) (profileId int, err error) {
 
-	descriptor, err := dg.GetNewFaceDescriptor(image)
+	descriptor, err := desc.GetNewFaceDescriptor(image)
 	if err != nil {
 		go func() {
 			br := models.BadRequest{
@@ -50,9 +49,9 @@ func CreateNewProfile(ra RecognizeAgregator, dg DescriptorGetter, ps ProfileStor
 				Shop:        shop,
 			}
 			switch err.(type) {
-			case *adaptors.NoFaceError:
+			case *NoFaceError:
 				br.ErrorType = models.NoFace
-			case *adaptors.MultipleFaces:
+			case *MultipleFaces:
 				br.ErrorType = models.MultipleRecognized
 			}
 			ps.LogBadRequest(br)
@@ -63,7 +62,7 @@ func CreateNewProfile(ra RecognizeAgregator, dg DescriptorGetter, ps ProfileStor
 	if err != nil {
 		return
 	}
-	err = ra.ReinitRecognizer(shop)
+	err = recognizers.ReinitRecognizer(shop)
 
 	return
 }

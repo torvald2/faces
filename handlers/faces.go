@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"unicode/utf8"
 
 	"atbmarket.comfaceapp/services"
 	"github.com/ascarter/requestid"
 	"github.com/gorilla/mux"
 )
 
-func GetRecognizeFaceHandler(ps services.ProfileStore, ra services.RecognizeAgregator) http.Handler {
+func GetRecognizeFaceHandler(ps services.ProfileStore) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		id := params["id"]
@@ -29,7 +30,7 @@ func GetRecognizeFaceHandler(ps services.ProfileStore, ra services.RecognizeAgre
 			return
 		}
 		rid, _ := requestid.FromContext(r.Context())
-		profile, err := services.RecognizeFace(ra, ps, bodyBytes, rid, numId)
+		profile, err := services.RecognizeFace(ps, bodyBytes, rid, numId)
 		if err != nil {
 			respDesc := fmt.Sprintf("Проблема при расспознании лица %v", err)
 			responseWithError(respDesc, w, http.StatusInternalServerError)
@@ -41,13 +42,19 @@ func GetRecognizeFaceHandler(ps services.ProfileStore, ra services.RecognizeAgre
 
 }
 
-func GetNewFaceHandler(ps services.ProfileStore, ra services.DescriptorGetter) http.Handler {
+func GetNewFaceHandler(ps services.ProfileStore) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		id := params["id"]
+		userName := r.FormValue("name")
 		numId, err := strconv.Atoi(id)
 		if err != nil {
 			respDesc := fmt.Sprintf("Не верный формат номера магазина. %v", err)
+			responseWithError(respDesc, w, http.StatusBadRequest)
+			return
+		}
+		if utf8.RuneCountInString(userName) < 1 {
+			respDesc := fmt.Sprintf("Фио пользователя не должно быть пустым. %v", err)
 			responseWithError(respDesc, w, http.StatusBadRequest)
 			return
 		}
@@ -59,7 +66,7 @@ func GetNewFaceHandler(ps services.ProfileStore, ra services.DescriptorGetter) h
 			return
 		}
 		rid, _ := requestid.FromContext(r.Context())
-		profile, err := services.RecognizeFace(ra, ps, bodyBytes, rid, numId)
+		profile, err := services.CreateNewProfile(ps, bodyBytes, userName, numId, rid)
 		if err != nil {
 			respDesc := fmt.Sprintf("Проблема при расспознании лица %v", err)
 			responseWithError(respDesc, w, http.StatusInternalServerError)

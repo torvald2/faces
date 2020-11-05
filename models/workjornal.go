@@ -1,12 +1,16 @@
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"errors"
+	"time"
+)
 
-type OperationType int
+type OperationType string
 
 const (
-	Coming OperationType = iota
-	Leaving
+	Coming  OperationType = "coming"
+	Leaving OperationType = "leaving"
 )
 
 type JornalOperation struct {
@@ -16,4 +20,20 @@ type JornalOperation struct {
 	OperationDate    time.Time     `json:"operation_date"`
 	OperationType    OperationType `json:"operation_type"`
 	RequestId        string        `json:"request_id"`
+}
+
+func (op *JornalOperation) UnmarshalJSON(data []byte) error {
+	type Aux JornalOperation
+	var a *Aux = (*Aux)(op)
+	if err := json.Unmarshal(data, &a); err != nil {
+		return err
+	}
+	switch op.OperationType {
+	case Coming, Leaving:
+		return nil
+	default:
+		op.OperationType = ""
+		return errors.New("invalid value for OperationType")
+	}
+	return nil
 }
