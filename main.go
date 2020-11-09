@@ -15,15 +15,20 @@ import (
 func main() {
 	// Config logger
 	logger, _ := zap.NewProduction()
+	defer logger.Sync()
 	undo := zap.ReplaceGlobals(logger)
 	defer undo()
 	//Load .env file (for dev environment)
-	err := godotenv.Load()
-	if err != nil {
-		zap.L().Info("No .env files found. Using real environment")
+	if env := os.Getenv("ENVIRONMENT"); env != "PRODUCTION" {
+		err := godotenv.Load()
+		if err != nil {
+			logger.Info("No .env files found. Using real environment")
+		}
+
 	}
 
 	wait := time.Second * 2
+	logger.Info("Current environment", zap.String("DB_CONNECTION_STRING", os.Getenv("DB_CONNECTION_STRING")))
 	router := handlers.NewRouter()
 	srv := &http.Server{
 		Addr:    ":" + "8080",
