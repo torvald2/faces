@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"time"
 
 	"atbmarket.comfaceapp/models"
 
@@ -149,10 +150,15 @@ var thisStore Store
 var once sync.Once
 
 func dbInit() {
+	var db *sql.DB
+	var err error
 	conn_string := os.Getenv("DB_CONNECTION_STRING")
-	db, err := sql.Open("postgres", conn_string)
-	if err != nil {
-		panic(err)
+	for i := 1; i < 6; i++ {
+		db, err = sql.Open("postgres", conn_string)
+		if err == nil {
+			break
+		}
+		time.Sleep(time.Duration(i) * time.Second)
 	}
 	createTables(db)
 	thisStore = Store{db}
