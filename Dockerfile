@@ -1,7 +1,5 @@
 FROM debian
 
-ENV HTTPS_PROXY="https://127.0.0.1:5555"
-ENV HTTP_PROXY="https://127.0.0.1:5555"
 
 RUN  apt-get update -y
 RUN  apt-get install software-properties-common -y
