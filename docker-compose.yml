@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   web:
-    build: .
+    image: "valis12/faces:0.2"
     ports:
       - "8080:8080"
     environment:
