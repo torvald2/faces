@@ -158,7 +158,11 @@ func dbInit() {
 		if err == nil {
 			break
 		}
+
 		time.Sleep(time.Duration(i) * time.Second)
+	}
+	if err != nil {
+		panic(err)
 	}
 	createTables(db)
 	thisStore = Store{db}
