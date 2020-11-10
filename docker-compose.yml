@@ -6,6 +6,7 @@ services:
       - "8080:8080"
     environment:
         DB_CONNECTION_STRING: postgres://faceapp@storage:5432/faceapp?sslmode=disable
+        ACTIVE_SHOPS: 1,2,3
   storage:
     image: postgres
     environment: 
@@ -13,3 +14,4 @@ services:
     volumes:
         - ./pgdata:/var/lib/postgres/data
         - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+
