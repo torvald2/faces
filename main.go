@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"time"
 
+	log "atbmarket.comfaceapp/app_logger"
 	"atbmarket.comfaceapp/handlers"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
@@ -14,21 +15,18 @@ import (
 
 func main() {
 	// Config logger
-	logger, _ := zap.NewProduction()
-	defer logger.Sync()
-	undo := zap.ReplaceGlobals(logger)
-	defer undo()
+
 	//Load .env file (for dev environment)
 	if env := os.Getenv("ENVIRONMENT"); env != "PRODUCTION" {
 		err := godotenv.Load()
 		if err != nil {
-			logger.Info("No .env files found. Using real environment")
+			log.Logger.Info("No .env files found. Using real environment")
 		}
 
 	}
 
 	wait := time.Second * 2
-	logger.Info("Current environment", zap.String("DB_CONNECTION_STRING", os.Getenv("DB_CONNECTION_STRING")))
+	log.Logger.Info("Current environment", zap.String("DB_CONNECTION_STRING", os.Getenv("DB_CONNECTION_STRING")))
 	router := handlers.NewRouter()
 	srv := &http.Server{
 		Addr:    ":" + "8080",

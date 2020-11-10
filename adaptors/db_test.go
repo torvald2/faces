@@ -64,7 +64,7 @@ func TestNewJornalRecord(t *testing.T) {
 	jornal := models.JornalOperation{
 		UserId:        1,
 		OperationDate: time.Now(),
-		OperationType: 1,
+		OperationType: "1",
 	}
 	if err := store.NewJornalRecord(jornal); err != nil {
 		t.Errorf("Error in insert jornal operation %v", err)
@@ -81,7 +81,7 @@ func TestLoadRequest(t *testing.T) {
 		RecognizedUsers: []int{1, 2, 3},
 		CurrentFace:     []byte{1, 2, 3},
 		RecognizeTime:   time.Now(),
-		ErrorType:       1,
+		ErrorType:       "1",
 		Shop:            1,
 		RequestId:       "123",
 	}

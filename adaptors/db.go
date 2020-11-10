@@ -7,6 +7,9 @@ import (
 	"sync"
 	"time"
 
+	"go.uber.org/zap"
+
+	log "atbmarket.comfaceapp/app_logger"
 	"atbmarket.comfaceapp/models"
 
 	pg "github.com/lib/pq"
@@ -158,6 +161,7 @@ func dbInit() {
 		if err == nil {
 			break
 		}
+		log.Logger.Warn("Connection db. New attemt", zap.Error(err))
 
 		time.Sleep(time.Duration(i) * time.Second)
 	}
