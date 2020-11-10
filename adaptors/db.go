@@ -127,13 +127,22 @@ func (s Store) LogBadRequest(request models.BadRequest) error {
 	return err
 }
 func createTables(db *sql.DB) {
+	var tx *sql.Tx
+	var err error
 	tables := map[string]string{
 		"profiles":    "CREATE TABLE IF NOT EXISTS profiles (id SERIAL PRIMARY KEY ,descriptor double precision [] not null, name text not null,shop_num int NOT NULL, created_date time not null DEFAULT NOW())",
 		"pictures":    "CREATE TABLE IF NOT EXISTS pictures (id SERIAL PRIMARY KEY ,profile_id INT, data bytea NOT NULL)",
 		"workjornal":  "CREATE TABLE IF NOT EXISTS workjornal (id SERIAL  PRIMARY KEY, profile_id INT NOT NULL,operation_type TEXT NOT NULL, operation_date TIME NOT NULL, created_date time not null DEFAULT NOW())",
 		"badRequests": "CREATE TABLE IF NOT EXISTS badrequest (id SERIAL  PRIMARY KEY, profile_id INT, recognized_profiles INT[], current_face bytea, error_type TEXT,recognized_time time, shop_id INT, request_id TEXT, created_date time not null DEFAULT NOW())",
 	}
-	tx, err := db.Begin()
+	for i := 1; i < 10; i++ {
+		tx, err = db.Begin()
+		if err == nil {
+			break
+		}
+		log.Logger.Warn("Connection db. New attemt", zap.Error(err))
+		time.Sleep(time.Duration(i) * time.Second)
+	}
 	if err != nil {
 		panic(err)
 	}

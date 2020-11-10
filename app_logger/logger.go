@@ -7,6 +7,6 @@ import (
 var Logger *zap.Logger
 
 func init() {
-	Logger, _ := zap.NewProduction()
+	Logger, _ = zap.NewProduction()
 	zap.ReplaceGlobals(Logger)
 }
