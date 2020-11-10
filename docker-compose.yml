@@ -7,6 +7,9 @@ services:
     environment:
         DB_CONNECTION_STRING: postgres://faceapp@storage:5432/faceapp?sslmode=disable
         ACTIVE_SHOPS: 1,2,3
+    depends_on:
+      - storage
+    network_mode: host
   storage:
     image: postgres
     environment: 
