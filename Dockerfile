@@ -1,5 +1,6 @@
 FROM debian
 
+ENV http_proxy http://localhost:5555
 
 RUN  apt-get update -y
 RUN  apt-get install software-properties-common -y
