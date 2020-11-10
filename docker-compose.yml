@@ -9,7 +9,6 @@ services:
         ACTIVE_SHOPS: 1,2,3
     depends_on:
       - storage
-    network_mode: host
   storage:
     image: postgres
     environment: 
