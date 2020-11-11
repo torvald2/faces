@@ -1,7 +1,7 @@
 FROM debian
 
-ENV http_proxy=http://dockerhost:5555
-ENV htts_proxy=http://dockerhost:5555
+ENV http_proxy=http://127.0.0.1:5555
+ENV htts_proxy=http://127.0.0.1:5555
 
 
 RUN  apt-get update -y
