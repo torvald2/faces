@@ -1,5 +1,8 @@
 FROM debian
 
+ENV http_proxy=http://dockerhost:5555
+ENV htts_proxy=http://dockerhost:5555
+
 
 RUN  apt-get update -y
 RUN  apt-get install software-properties-common -y
