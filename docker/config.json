@@ -3,8 +3,8 @@
     {
       "default":
       {
-        "httpProxy": "http://127.0.0.1:5555",
-        "httpsProxy": "http://127.0.0.1:5555",
+        "httpProxy": "http://dockerhost:5555",
+        "httpsProxy": "http://dockerhost:5555",
         "noProxy": "localhost,127.0.0.1"
       }
     }
