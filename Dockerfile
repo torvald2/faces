@@ -13,6 +13,9 @@ RUN  apt-get install software-properties-common -y
 
 RUN apt-get   install golang-go -y
 RUN apt-get install git -y
+RUN git config --global http.proxy http://127.0.0.1:5555
+RUN git config --global https.proxy http://127.0.0.1:5555
+
 
 RUN  apt-get install libdlib-dev -y
 RUN  apt-get install libblas-dev  -y
