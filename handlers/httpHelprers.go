@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -22,4 +23,15 @@ func responseOk(w http.ResponseWriter, data interface{}) {
 	respData.Data = data
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(respData)
+}
+
+func getRequestID(ctx context.Context) string {
+
+	reqID := ctx.Value(RequestIDString)
+
+	if ret, ok := reqID.(string); ok {
+		return ret
+	}
+
+	return ""
 }

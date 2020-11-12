@@ -26,6 +26,8 @@ func NewRouter() *mux.Router {
 	jornalHandler := GetWorkJornalHandler(store, store)
 	profileListHandler := GetProfileHandler(store)
 
+	r.Use(getReqIdMidelware)
+
 	api := r.PathPrefix("/api/").Subrouter()
 
 	api.Handle("/profile/{id}", profileListHandler).Methods("GET")

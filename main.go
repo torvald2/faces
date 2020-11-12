@@ -36,12 +36,14 @@ func main() {
 		if err := srv.ListenAndServe(); err != nil {
 			panic(err)
 		}
+		log.Logger.Info("Listen is started")
 	}()
 	// Listen for os sygnals
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	<-c
 	//Grasefun shutdown
+	log.Logger.Info("Star server Shutdown on system sygnal")
 	ctx, cancel := context.WithTimeout(context.Background(), wait)
 	defer cancel()
 	srv.Shutdown(ctx)
