@@ -13,6 +13,8 @@ services:
       - storage
   storage:
     image: postgres
+    ports:
+      - "5432:5432"
     environment: 
         POSTGRES_PASSWORD: Cbvajybz13
     volumes:
