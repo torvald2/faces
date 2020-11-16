@@ -17,7 +17,7 @@ services:
     ports:
       - "5432:5432"
     environment: 
-         : Cbvajybz13
+        POSTGRES_PASSWORD: Cbvajybz13
     volumes:
         - ./pgdata:/var/lib/postgresql/data:z
         - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
