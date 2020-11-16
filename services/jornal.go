@@ -1,6 +1,8 @@
 package services
 
 import (
+	"time"
+
 	"atbmarket.comfaceapp/models"
 )
 
@@ -12,6 +14,7 @@ func RegisterJornalOperation(j JornalRecorder, log Logger, operation models.Jorn
 				ErrorType:       models.NotMe,
 				UserId:          operation.UserId,
 				RecognizedUsers: []int{operation.RecognizedUserID},
+				RecognizeTime:   time.Now(),
 			})
 
 		}()

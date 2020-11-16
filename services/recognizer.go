@@ -39,7 +39,7 @@ func (r Recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
 		return
 	}
 
-	userId = r.rec.ClassifyThreshold(face.Descriptor, 0.5)
+	userId = r.rec.ClassifyThreshold(face.Descriptor, 0.4)
 	if userId < 0 {
 		return 0, UserNotFound{}
 	}
