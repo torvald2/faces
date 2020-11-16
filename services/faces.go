@@ -23,14 +23,16 @@ func RecognizeFace(ps ProfileStore, image []byte, requestId string, shopId int) 
 			}
 			switch err.(type) {
 			case *NoFaceError:
+				ps.LogBadRequest(br)
 				br.ErrorType = models.NoFace
 			case *MultipleFaces:
+				ps.LogBadRequest(br)
 				br.ErrorType = models.MultipleRecognized
 			case *UserNotFound:
+				ps.LogBadRequest(br)
 				br.ErrorType = models.UserNotFound
 
 			}
-			ps.LogBadRequest(br)
 		}()
 		return
 	}
@@ -50,11 +52,12 @@ func CreateNewProfile(ps ProfileStore, image []byte, name string, shop int, requ
 			}
 			switch err.(type) {
 			case *NoFaceError:
+				ps.LogBadRequest(br)
 				br.ErrorType = models.NoFace
 			case *MultipleFaces:
+				ps.LogBadRequest(br)
 				br.ErrorType = models.MultipleRecognized
 			}
-			ps.LogBadRequest(br)
 		}()
 		return
 	}
