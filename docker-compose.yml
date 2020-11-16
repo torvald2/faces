@@ -19,6 +19,6 @@ services:
     environment: 
         POSTGRES_PASSWORD: Cbvajybz13
     volumes:
-        - ./pgdata:/var/lib/postgresql/data:z
+        - ./pgdata:/var/lib/postgresql/data
         - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
 
