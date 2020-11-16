@@ -8,7 +8,7 @@ services:
       - "8080:8080"
     environment:
         DB_CONNECTION_STRING: postgres://faceapp:secretPassword@storage:5432/faceapp?sslmode=disable
-        ACTIVE_SHOPS: 1,2,3
+        ACTIVE_SHOPS: 1,2,3,9
         LOG_LEVEL: DEBUG
     depends_on:
       - storage
@@ -17,7 +17,7 @@ services:
     ports:
       - "5432:5432"
     environment: 
-        POSTGRES_PASSWORD: Cbvajybz13
+         : Cbvajybz13
     volumes:
         - ./pgdata:/var/lib/postgresql/data:z
         - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh

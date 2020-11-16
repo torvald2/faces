@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"time"
 
 	"atbmarket.comfaceapp/models"
 )
@@ -17,21 +18,21 @@ func RecognizeFace(ps ProfileStore, image []byte, requestId string, shopId int) 
 	if err != nil {
 		go func() {
 			br := models.BadRequest{
-				CurrentFace: image,
-				RequestId:   requestId,
-				Shop:        shopId,
+				CurrentFace:   image,
+				RequestId:     requestId,
+				Shop:          shopId,
+				RecognizeTime: time.Now(),
 			}
 			switch err.(type) {
-			case *NoFaceError:
-				ps.LogBadRequest(br)
+			case NoFaceError:
 				br.ErrorType = models.NoFace
-			case *MultipleFaces:
 				ps.LogBadRequest(br)
+			case MultipleFaces:
 				br.ErrorType = models.MultipleRecognized
-			case *UserNotFound:
 				ps.LogBadRequest(br)
+			case UserNotFound:
 				br.ErrorType = models.UserNotFound
-
+				ps.LogBadRequest(br)
 			}
 		}()
 		return
@@ -46,17 +47,18 @@ func CreateNewProfile(ps ProfileStore, image []byte, name string, shop int, requ
 	if err != nil {
 		go func() {
 			br := models.BadRequest{
-				CurrentFace: image,
-				RequestId:   requestId,
-				Shop:        shop,
+				CurrentFace:   image,
+				RequestId:     requestId,
+				Shop:          shop,
+				RecognizeTime: time.Now(),
 			}
 			switch err.(type) {
-			case *NoFaceError:
-				ps.LogBadRequest(br)
+			case NoFaceError:
 				br.ErrorType = models.NoFace
-			case *MultipleFaces:
 				ps.LogBadRequest(br)
+			case MultipleFaces:
 				br.ErrorType = models.MultipleRecognized
+				ps.LogBadRequest(br)
 			}
 		}()
 		return
