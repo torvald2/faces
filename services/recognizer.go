@@ -123,3 +123,11 @@ func floatSliceToDescriptor(points []float64) fr.Descriptor {
 	}
 	return dots
 }
+
+func descriptorToFloatSlice(desc fr.Descriptor) []float64 {
+	points := make([]float64, 128)
+	for k, v := range desc {
+		points[k] = float64(v)
+	}
+	return points
+}
