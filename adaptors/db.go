@@ -3,13 +3,13 @@ package adaptors
 import (
 	"database/sql"
 	"fmt"
-	"os"
 	"sync"
 	"time"
 
 	"go.uber.org/zap"
 
 	log "atbmarket.comfaceapp/app_logger"
+	"atbmarket.comfaceapp/config"
 	"atbmarket.comfaceapp/models"
 
 	pg "github.com/lib/pq"
@@ -162,11 +162,11 @@ var thisStore Store
 var once sync.Once
 
 func dbInit() {
+	conf := config.GetConfig()
 	var db *sql.DB
 	var err error
-	conn_string := os.Getenv("DB_CONNECTION_STRING")
 	for i := 1; i < 6; i++ {
-		db, err = sql.Open("postgres", conn_string)
+		db, err = sql.Open("postgres", conf.DBConnectionString)
 		if err == nil {
 			break
 		}

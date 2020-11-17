@@ -1,10 +1,11 @@
 package services
 
 import (
-	"os"
 	"strconv"
 	"strings"
 	"sync"
+
+	"atbmarket.comfaceapp/config"
 )
 
 type RecognizeAgg struct {
@@ -36,7 +37,8 @@ func (r RecognizeAgg) ReinitRecognizer(shopId int) error {
 var recognizers RecognizeAgg
 
 func CreateRecognizers(profileStore ProfileStore) (err error) {
-	shops := strings.Split(os.Getenv("ACTIVE_SHOPS"), ",")
+	conf := config.GetConfig()
+	shops := strings.Split(conf.Shops, ",")
 	recognizers.profileStore = profileStore
 	recognizers.recognizers = make(map[int]Recognizer)
 	if len(shops) == 0 {
