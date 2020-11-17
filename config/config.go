@@ -21,7 +21,7 @@ type appConfig struct {
 var conf appConfig
 var once sync.Once
 
-func GetConfil() *appConfig {
+func GetConfig() *appConfig {
 	once.Do(setUp)
 	return &conf
 }
