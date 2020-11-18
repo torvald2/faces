@@ -13,7 +13,7 @@ services:
         LOG_LEVEL: DEBUG
         TOLERANCE: 0.8
         IS_DEV: PRODUCTION
-        RECOGNIZING_METHOD: PROD
+        RECOGNIZING_METHOD: CUSTOM
     depends_on:
       - storage
   storage:
