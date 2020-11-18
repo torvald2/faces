@@ -14,6 +14,7 @@ RUN  apt-get install software-properties-common -y
 
 #RUN apt-get  -t buster-backports install golang-1.14-go -y
 #RUN apt-get install golang-1.15-go -y
+RUN apt-get install wget
 RUN apt-get install git -y
 RUN git config --global http.proxy http://127.0.0.1:5555
 RUN git config --global https.proxy http://127.0.0.1:5555
