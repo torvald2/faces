@@ -34,7 +34,7 @@ RUN mkdir app
 COPY . /app
 
 WORKDIR /app
-
+RUN go version
 RUN go get -u gonum.org/v1/gonum
 RUN go get -u github.com/Kagami/go-face
 RUN go get -u github.com/gorilla/mux
