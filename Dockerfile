@@ -37,7 +37,7 @@ RUN mkdir app
 COPY . /app
 
 WORKDIR /app
-RUN apt-get install build-essential
+RUN apt-get install build-essential -y
 
 ENV PATH=$PATH:/usr/local/go/bin
 RUN  go get -u gonum.org/v1/gonum
