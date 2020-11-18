@@ -22,7 +22,7 @@ RUN git config --global https.proxy http://127.0.0.1:5555
 RUN export http_proxy=http://127.0.0.1:5555
 RUN export https_proxy=http://127.0.0.1:5555
 
-RUN wget -O https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz 
+RUN wget https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz 
 RUN  tar -xvf go1.14.2.linux-amd64.tar.gz
 RUN  mv go /usr/local
 RUN export PATH=$PATH:/usr/local/go/bin
