@@ -3,17 +3,17 @@ FROM debian
 ENV http_proxy=http://127.0.0.1:5555
 ENV htts_proxy=http://127.0.0.1:5555
 
-RUN  echo "deb http://ftp.uk.debian.org/debian/ unstable main" |  tee -a /etc/apt/sources.list
+#RUN  echo "deb http://ftp.uk.debian.org/debian/ unstable main" |  tee -a /etc/apt/sources.list
 RUN  apt-get update -y
 RUN  apt-get install software-properties-common -y
 
-##RUN  add-apt-repository ppa:/gophers/archive
+#RUN  add-apt-repository ppa:/gophers/archive
 ##RUN  apt-update -y
 ##RUN  add-apt-repository ppa:kagamih/dlib
 ##RUN  apt-get update -y   
 
-RUN apt-get  -t buster-backports install golang-1.14-go -y
-
+#RUN apt-get  -t buster-backports install golang-1.14-go -y
+RUN apt-get install golang-go -y
 RUN apt-get install git -y
 RUN git config --global http.proxy http://127.0.0.1:5555
 RUN git config --global https.proxy http://127.0.0.1:5555
@@ -35,6 +35,7 @@ COPY . /app
 
 WORKDIR /app
 
+RUN go get -u gonum.org/v1/gonum
 RUN go mod download
 RUN export CPATH="/usr/include/hdf5/serial/"
 RUN go build -v main.go
