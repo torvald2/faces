@@ -23,7 +23,7 @@ RUN git config --global https.proxy http://127.0.0.1:5555
 RUN curl -x 'http://127.0.0.1:5555' -O https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz 
 RUN  tar -xvf go1.14.2.linux-amd64.tar.gz
 RUN  mv go /usr/local
-RUN export PATH=$PATH:/usr/local/go/bin
+
 
 RUN  apt-get install libdlib-dev -y
 RUN  apt-get install libblas-dev  -y
@@ -37,6 +37,7 @@ RUN mkdir app
 COPY . /app
 
 WORKDIR /app
+ENV PATH=$PATH:/usr/local/go/bin
 RUN  go get -u gonum.org/v1/gonum
 RUN go mod download
 RUN export CPATH="/usr/include/hdf5/serial/"
