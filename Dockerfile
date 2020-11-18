@@ -6,7 +6,7 @@ ENV htts_proxy=http://127.0.0.1:5555
 
 RUN  apt-get update -y
 RUN  apt-get install software-properties-common -y
-RUN RUN deb http://deb.debian.org/debian buster-backports main
+RUN  deb http://deb.debian.org/debian buster-backports main
 RUN  apt-get update -y
 
 ##RUN  add-apt-repository ppa:/gophers/archive
