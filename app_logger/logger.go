@@ -1,8 +1,7 @@
 package app_logger
 
 import (
-	"os"
-
+	"atbmarket.comfaceapp/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -11,7 +10,8 @@ var Logger *zap.Logger
 var logLevel zap.AtomicLevel
 
 func init() {
-	switch configLevel := os.Getenv("LOG_LEVEL"); configLevel {
+	app_conf := config.GetConfig()
+	switch app_conf.LogLevel {
 	case "DEBUG":
 		logLevel = zap.NewAtomicLevelAt(zapcore.DebugLevel)
 	case "ERROR":

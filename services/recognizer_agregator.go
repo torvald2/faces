@@ -1,19 +1,20 @@
 package services
 
 import (
-	"os"
 	"strconv"
 	"strings"
 	"sync"
+
+	"atbmarket.comfaceapp/config"
 )
 
 type RecognizeAgg struct {
 	mu           sync.Mutex
-	recognizers  map[int]Recognizer
+	recognizers  map[int]FaceRecognizer
 	profileStore ProfileStore
 }
 
-func (r RecognizeAgg) GetRecognizer(shopId int) (Recognizer, bool) {
+func (r RecognizeAgg) GetRecognizer(shopId int) (FaceRecognizer, bool) {
 	recognizer, ok := r.recognizers[shopId]
 	return recognizer, ok
 }
@@ -36,9 +37,11 @@ func (r RecognizeAgg) ReinitRecognizer(shopId int) error {
 var recognizers RecognizeAgg
 
 func CreateRecognizers(profileStore ProfileStore) (err error) {
-	shops := strings.Split(os.Getenv("ACTIVE_SHOPS"), ",")
+	var rec FaceRecognizer
+	conf := config.GetConfig()
+	shops := strings.Split(conf.Shops, ",")
 	recognizers.profileStore = profileStore
-	recognizers.recognizers = make(map[int]Recognizer)
+	recognizers.recognizers = make(map[int]FaceRecognizer)
 	if len(shops) == 0 {
 		panic("No shops in ACTIVE_SHOPS environment variable")
 	}
@@ -53,7 +56,11 @@ func CreateRecognizers(profileStore ProfileStore) (err error) {
 		if err != nil {
 			continue
 		}
-		rec, err := NewRecognizer(profiles, shopNum)
+		if conf.RecognizionMethod == "CUSTOM" {
+			rec, err = NewCustomRecognizer(profiles, shopNum)
+		} else {
+			rec, err = NewRecognizer(profiles, shopNum)
+		}
 		if err != nil {
 			return err
 		}

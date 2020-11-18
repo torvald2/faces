@@ -21,3 +21,7 @@ type JornalRecorder interface {
 type Logger interface {
 	LogBadRequest(request models.BadRequest) error
 }
+
+type FaceRecognizer interface {
+	GetUserIDByFace(image []byte) (userId int, err error)
+}

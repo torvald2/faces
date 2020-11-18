@@ -1,6 +1,9 @@
 package services
 
 import (
+	"strconv"
+
+	"atbmarket.comfaceapp/config"
 	"atbmarket.comfaceapp/models"
 	"github.com/Kagami/go-face"
 	fr "github.com/Kagami/go-face"
@@ -25,8 +28,9 @@ func (e MultipleMatch) Error() string {
 }
 
 type Recognizer struct {
-	rec    *fr.Recognizer
-	shopId int
+	rec       *fr.Recognizer
+	shopId    int
+	tolerance float32
 }
 
 type descriptor struct {
@@ -39,7 +43,7 @@ func (r Recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
 		return
 	}
 
-	userId = r.rec.ClassifyThreshold(face.Descriptor, 0.4)
+	userId = r.rec.ClassifyThreshold(face.Descriptor, r.tolerance)
 	if userId < 0 {
 		return 0, UserNotFound{}
 	}
@@ -84,6 +88,7 @@ func (r Recognizer) GetShopId() int {
 }
 
 func NewRecognizer(data []models.Profile, shopId int) (rec Recognizer, err error) {
+	conf := config.GetConfig()
 	var samples []face.Descriptor
 	var avengers []int32
 
@@ -96,7 +101,11 @@ func NewRecognizer(data []models.Profile, shopId int) (rec Recognizer, err error
 		samples = append(samples, floatSliceToDescriptor(v.Descriptor))
 	}
 	tmp_rec.SetSamples(samples, avengers)
-	return Recognizer{tmp_rec, shopId}, nil
+	tolerance, err := strconv.ParseFloat(conf.Tolerance, 32)
+	if err != nil {
+		tolerance = 0.6
+	}
+	return Recognizer{tmp_rec, shopId, float32(tolerance)}, nil
 }
 
 var desc descriptor
@@ -113,4 +122,12 @@ func floatSliceToDescriptor(points []float64) fr.Descriptor {
 		dots[k] = float32(v)
 	}
 	return dots
+}
+
+func descriptorToFloatSlice(desc fr.Descriptor) []float64 {
+	points := make([]float64, 128)
+	for k, v := range desc {
+		points[k] = float64(v)
+	}
+	return points
 }

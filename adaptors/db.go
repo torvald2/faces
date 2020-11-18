@@ -3,13 +3,13 @@ package adaptors
 import (
 	"database/sql"
 	"fmt"
-	"os"
 	"sync"
 	"time"
 
 	"go.uber.org/zap"
 
 	log "atbmarket.comfaceapp/app_logger"
+	"atbmarket.comfaceapp/config"
 	"atbmarket.comfaceapp/models"
 
 	pg "github.com/lib/pq"
@@ -130,10 +130,10 @@ func createTables(db *sql.DB) {
 	var tx *sql.Tx
 	var err error
 	tables := map[string]string{
-		"profiles":    "CREATE TABLE IF NOT EXISTS profiles (id SERIAL PRIMARY KEY ,descriptor double precision [] not null, name text not null,shop_num int NOT NULL, created_date time not null DEFAULT NOW())",
+		"profiles":    "CREATE TABLE IF NOT EXISTS profiles (id SERIAL PRIMARY KEY ,descriptor double precision [] not null, name text not null,shop_num int NOT NULL, created_date timestamp not null DEFAULT NOW())",
 		"pictures":    "CREATE TABLE IF NOT EXISTS pictures (id SERIAL PRIMARY KEY ,profile_id INT, data bytea NOT NULL)",
-		"workjornal":  "CREATE TABLE IF NOT EXISTS workjornal (id SERIAL  PRIMARY KEY, profile_id INT NOT NULL,operation_type TEXT NOT NULL, operation_date TIME NOT NULL, created_date time not null DEFAULT NOW())",
-		"badRequests": "CREATE TABLE IF NOT EXISTS badrequest (id SERIAL  PRIMARY KEY, profile_id INT, recognized_profiles INT[], current_face bytea, error_type TEXT,recognized_time time, shop_id INT, request_id TEXT, created_date time not null DEFAULT NOW())",
+		"workjornal":  "CREATE TABLE IF NOT EXISTS workjornal (id SERIAL  PRIMARY KEY, profile_id INT NOT NULL,operation_type TEXT NOT NULL, operation_date timestamp NOT NULL, created_date timestamp not null DEFAULT NOW())",
+		"badRequests": "CREATE TABLE IF NOT EXISTS badrequest (id SERIAL  PRIMARY KEY, profile_id INT, recognized_profiles INT[], current_face bytea, error_type TEXT,recognized_time timestamp, shop_id INT, request_id TEXT, created_date timestamp not null DEFAULT NOW())",
 	}
 	for i := 1; i < 10; i++ {
 		tx, err = db.Begin()
@@ -162,11 +162,11 @@ var thisStore Store
 var once sync.Once
 
 func dbInit() {
+	conf := config.GetConfig()
 	var db *sql.DB
 	var err error
-	conn_string := os.Getenv("DB_CONNECTION_STRING")
 	for i := 1; i < 6; i++ {
-		db, err = sql.Open("postgres", conn_string)
+		db, err = sql.Open("postgres", conf.DBConnectionString)
 		if err == nil {
 			break
 		}
