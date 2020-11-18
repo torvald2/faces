@@ -15,14 +15,15 @@ RUN  apt-get install software-properties-common -y
 ##RUN  apt-get update -y   
 
 ##RUN apt-get  -t buster-backports install "golang-1.14-go" -y
-RUN wget https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz
-RUN  tar -xvf go1.14.2.linux-amd64.tar.gz
-RUN  mv go /usr/local
 
+RUN apt-get install wget -y
 RUN apt-get install git -y
 RUN git config --global http.proxy http://127.0.0.1:5555
 RUN git config --global https.proxy http://127.0.0.1:5555
 
+RUN wget https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz
+RUN  tar -xvf go1.14.2.linux-amd64.tar.gz
+RUN  mv go /usr/local
 
 RUN  apt-get install libdlib-dev -y
 RUN  apt-get install libblas-dev  -y
