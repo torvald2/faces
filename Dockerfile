@@ -36,7 +36,11 @@ COPY . /app
 WORKDIR /app
 
 RUN go get -u gonum.org/v1/gonum
-RUN go mod download
+RUN go get -u github.com/Kagami/go-face
+RUN go get -u github.com/gorilla/mux
+RUN go get -u github.com/joho/godotenv
+RUN go get -u github.com/lib/pq
+RUN go get -u go.uber.org/zap
 RUN export CPATH="/usr/include/hdf5/serial/"
 RUN go build -v main.go
 
