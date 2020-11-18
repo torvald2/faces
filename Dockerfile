@@ -11,7 +11,7 @@ RUN  apt-get install software-properties-common -y
 ##RUN  add-apt-repository ppa:kagamih/dlib
 ##RUN  apt-get update -y   
 
-RUN apt-get   install golang-go -y
+RUN apt-get   install golang-1.14-go -y
 RUN apt-get install git -y
 RUN git config --global http.proxy http://127.0.0.1:5555
 RUN git config --global https.proxy http://127.0.0.1:5555
