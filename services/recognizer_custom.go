@@ -40,7 +40,7 @@ func (r CustomRecognizer) classify(userVector *mat.VecDense) int {
 		d := mat.Dot(w, w)
 		dist := math.Sqrt(d)
 		log.Logger.Debug("Distance", zap.Float64("Distance", dist))
-		if float32(dist) > r.tolerance {
+		if float32(dist) < r.tolerance {
 			return k
 		}
 
