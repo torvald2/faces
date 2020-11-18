@@ -20,17 +20,23 @@ func (r RecognizeAgg) GetRecognizer(shopId int) (FaceRecognizer, bool) {
 }
 
 func (r RecognizeAgg) ReinitRecognizer(shopId int) error {
+	var rec FaceRecognizer
 	r.mu.Lock()
+	conf := config.GetConfig()
 	defer r.mu.Unlock()
 	profiles, err := r.profileStore.GetShopProfiles(shopId)
 	if err != nil {
 		return err
 	}
-	recignizer, err := NewRecognizer(profiles, shopId)
+	if conf.RecognizionMethod == "CUSTOM" {
+		rec, err = NewCustomRecognizer(profiles, shopId)
+	} else {
+		rec, err = NewRecognizer(profiles, shopId)
+	}
 	if err != nil {
 		return err
 	}
-	r.recognizers[shopId] = recignizer
+	r.recognizers[shopId] = rec
 	return nil
 }
 
