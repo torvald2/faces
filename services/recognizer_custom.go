@@ -4,6 +4,9 @@ import (
 	"math"
 	"strconv"
 
+	"go.uber.org/zap"
+
+	log "atbmarket.comfaceapp/app_logger"
 	"atbmarket.comfaceapp/config"
 	"atbmarket.comfaceapp/models"
 	fr "github.com/Kagami/go-face"
@@ -36,6 +39,7 @@ func (r CustomRecognizer) classify(userVector *mat.VecDense) int {
 		w.SubVec(v, userVector)
 		d := mat.Dot(w, w)
 		dist := math.Sqrt(d)
+		log.Logger.Debug("Distance", zap.Float64("Distance", dist))
 		if float32(dist) > r.tolerance {
 			return k
 		}
