@@ -13,7 +13,7 @@ RUN  apt-get install software-properties-common -y
 ##RUN  apt-get update -y   
 
 #RUN apt-get  -t buster-backports install golang-1.14-go -y
-RUN apt-get install golang-go -y
+RUN apt-get install golang-1.15-go -y
 RUN apt-get install git -y
 RUN git config --global http.proxy http://127.0.0.1:5555
 RUN git config --global https.proxy http://127.0.0.1:5555
@@ -34,13 +34,8 @@ RUN mkdir app
 COPY . /app
 
 WORKDIR /app
-RUN go version
-RUN go get -u gonum.org/v1/gonum
-RUN go get -u github.com/Kagami/go-face
-RUN go get -u github.com/gorilla/mux
-RUN go get -u github.com/joho/godotenv
-RUN go get -u github.com/lib/pq
-RUN go get -u go.uber.org/zap
+RUN  go get -u gonum.org/v1/gonum
+RUN go mod download
 RUN export CPATH="/usr/include/hdf5/serial/"
 RUN go build -v main.go
 
