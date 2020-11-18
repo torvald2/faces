@@ -11,22 +11,13 @@ import (
 	log "atbmarket.comfaceapp/app_logger"
 	"atbmarket.comfaceapp/config"
 	"atbmarket.comfaceapp/handlers"
-	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 )
 
 func main() {
-	conf := config.GetConfig()
+
 	// Config logger
-
-	//Load .env file (for dev environment)
-	if env := conf.IsDev; env != "PRODUCTION" {
-		err := godotenv.Load()
-		if err != nil {
-			log.Logger.Info("No .env files found. Using real environment")
-		}
-
-	}
+	conf := config.GetConfig()
 
 	wait := time.Second * 2
 	log.Logger.Info("Current environment", zap.String("Config", fmt.Sprintf("%v", conf)))

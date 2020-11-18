@@ -1,9 +1,12 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"reflect"
 	"sync"
+
+	"github.com/joho/godotenv"
 )
 
 // TODO  - marshaller with validator
@@ -27,6 +30,13 @@ func GetConfig() *appConfig {
 }
 
 func setUp() {
+	if env := os.Getenv("IS_DEV"); env != "PROD" {
+		err := godotenv.Load()
+		if err != nil {
+			fmt.Println("No .env files found. Using real environment")
+		}
+
+	}
 	v := reflect.ValueOf(&conf).Elem()
 	t := v.Type()
 

@@ -11,8 +11,9 @@ services:
         APP_PORT: 8080
         ACTIVE_SHOPS: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
         LOG_LEVEL: DEBUG
-        TOLERANCE: 0.6
+        TOLERANCE: 0.8
         IS_DEV: PRODUCTION
+        RECOGNIZING_METHOD: CUSTOM
     depends_on:
       - storage
   storage:
