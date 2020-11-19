@@ -24,6 +24,9 @@ type JornalOperation struct {
 	ShopNum          string        `json:"-"`
 }
 
+type JornalOperationDB struct {
+}
+
 func (op *JornalOperation) UnmarshalJSON(data []byte) error {
 	type Aux JornalOperation
 	var a *Aux = (*Aux)(op)

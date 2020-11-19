@@ -20,7 +20,7 @@ func responseWithError(err error, w http.ResponseWriter) {
 	case services.UserNotFound:
 		statusCode = 404
 	default:
-		statusCode = 501
+		statusCode = 500
 	}
 	var respData models.HttpResponse
 	respData.Error = fmt.Sprintf("%v", err)
