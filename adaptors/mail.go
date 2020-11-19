@@ -1,7 +1,9 @@
 package adaptors
 
 import (
+	"fmt"
 	"io"
+	"net/smtp"
 	"strings"
 
 	"atbmarket.comfaceapp/config"
@@ -9,12 +11,21 @@ import (
 )
 
 func SendReport(attatch io.Reader, attachName string) error {
+	content_type := "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 	conf := config.GetConfig()
 	mail := email.NewEmail()
 	mail.Subject = "Ежедневная рассылка Приход/Уход"
 	mail.From = "Эксперимент уход/приход"
 	mail.To = strings.Split(conf.Emails, ",")
 	mail.Text = []byte("Ежедневный отчет по приходу уходу сотрудников во вложении")
-	mail.Attach(attatch, attachName, "")
+	if _, err := mail.Attach(attatch, attachName, content_type); err != nil {
+		return err
+	}
+	auth := smtp.PlainAuth("", conf.EMailUser, conf.EmailPassword, conf.EMailDomain)
+
+	if err := mail.Send(fmt.Sprintf("%v:%v", conf.EMailDomain, conf.EMailPort), auth); err != nil {
+		return err
+	}
+	return nil
 
 }

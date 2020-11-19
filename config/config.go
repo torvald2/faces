@@ -19,6 +19,10 @@ type appConfig struct {
 	Shops              string `env:"ACTIVE_SHOPS"`
 	Emails             string `env:"SEND_EMAILS"`
 	IsDev              string `env:"IS_DEV"`
+	EMailDomain        string `env:"EMAIL_DOMAIN"`
+	EMailPort          string `env:"EMAIL_PORT"`
+	EMailUser          string `env:"EMAIL_USER"`
+	EmailPassword      string `env:"EMAIL_PASSWORD"`
 }
 
 var conf appConfig
