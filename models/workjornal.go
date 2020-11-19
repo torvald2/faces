@@ -20,6 +20,8 @@ type JornalOperation struct {
 	OperationDate    time.Time     `json:"operation_date"`
 	OperationType    OperationType `json:"operation_type"`
 	RequestId        string        `json:"request_id"`
+	UserName         string        `json:"-"`
+	ShopNum          string        `json:"-"`
 }
 
 func (op *JornalOperation) UnmarshalJSON(data []byte) error {
