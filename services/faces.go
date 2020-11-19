@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"time"
 
 	"atbmarket.comfaceapp/models"
@@ -9,7 +8,7 @@ import (
 
 func RecognizeFace(ps ProfileStore, image []byte, requestId string, shopId int) (profile models.Profile, err error) {
 	recognozer, ok := recognizers.GetRecognizer(shopId)
-	err = fmt.Errorf("Для данного магазина нет ни одного профиля")
+	err = NoProfilesForShop{}
 	if !ok {
 		return
 	}

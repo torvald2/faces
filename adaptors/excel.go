@@ -24,11 +24,15 @@ func CreateSheet(operations []models.JornalOperation) (io.Reader, error) {
 		f.SetCellValue("Main", fmt.Sprintf("B%v", i+2), op.ShopNum)
 		f.SetCellValue("Main", fmt.Sprintf("C%v", i+2), op.OperationDate.Format("2006.01.02"))
 		f.SetCellValue("Main", fmt.Sprintf("D%v", i+2), op.OperationDate.Format("03:04:05"))
-		f.SetCellValue("Main", fmt.Sprintf("E%v", i+2), op.OperationType)
+		if op.OperationType == models.Coming {
+			f.SetCellValue("Main", fmt.Sprintf("E%v", i+2), "Приход")
+		} else {
+			f.SetCellValue("Main", fmt.Sprintf("E%v", i+2), "Уход")
+		}
 
 	}
 	f.SetActiveSheet(index)
-	f.Write(buf)
-	return buf, nil
+	err := f.Write(buf)
+	return buf, err
 
 }

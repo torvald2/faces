@@ -19,6 +19,8 @@ func responseWithError(err error, w http.ResponseWriter) {
 		statusCode = 412
 	case services.UserNotFound:
 		statusCode = 404
+	case services.NoProfilesForShop:
+		statusCode = 404
 	default:
 		statusCode = 500
 	}

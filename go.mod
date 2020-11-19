@@ -10,7 +10,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/mux v1.8.0
 	github.com/joho/godotenv v1.3.0
-	github.com/jordan-wright/email v4.0.1-0.20200917010138-e1c00e156980+incompatible // indirect
+	github.com/jordan-wright/email v4.0.1-0.20200917010138-e1c00e156980+incompatible
 	github.com/lib/pq v1.8.0
 	github.com/spf13/viper v1.7.1 // indirect
 	go.uber.org/multierr v1.6.0 // indirect

@@ -13,6 +13,7 @@ type NoFaceError struct{}
 type MultipleFaces struct{}
 type UserNotFound struct{}
 type MultipleMatch struct{}
+type NoProfilesForShop struct{}
 
 func (e NoFaceError) Error() string {
 	return "Лицо не найдено"
@@ -25,6 +26,10 @@ func (e UserNotFound) Error() string {
 }
 func (e MultipleMatch) Error() string {
 	return "Совпадение с несколькими пользователями"
+}
+
+func (e NoProfilesForShop) Error() string {
+	return "Для данного магазина нет ни одного профиля"
 }
 
 type Recognizer struct {
