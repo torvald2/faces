@@ -3,16 +3,29 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"atbmarket.comfaceapp/models"
+	"atbmarket.comfaceapp/services"
 )
 
-func responseWithError(errorDesc string, w http.ResponseWriter, status int) {
+func responseWithError(err error, w http.ResponseWriter) {
+	var statusCode int
+	switch err.(type) {
+	case services.NoFaceError:
+		statusCode = 412
+	case services.MultipleFaces:
+		statusCode = 412
+	case services.UserNotFound:
+		statusCode = 404
+	default:
+		statusCode = 501
+	}
 	var respData models.HttpResponse
-	respData.Error = errorDesc
+	respData.Error = fmt.Sprintf("%v", err)
 	respData.Status = "ERROR"
-	w.WriteHeader(status)
+	w.WriteHeader(statusCode)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(respData)
 }

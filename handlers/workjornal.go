@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -23,8 +22,7 @@ func GetWorkJornalHandler(wj services.JornalRecorder, log services.Logger) http.
 		if err != nil {
 			raw_data := new(strings.Builder)
 			io.Copy(raw_data, decoder.Buffered())
-			respDesc := fmt.Sprintf("Не верный формат сообщений %v", err)
-			responseWithError(respDesc, w, http.StatusInternalServerError)
+			responseWithError(err, w)
 			applog.Logger.Warn("Request decode error",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
@@ -37,8 +35,7 @@ func GetWorkJornalHandler(wj services.JornalRecorder, log services.Logger) http.
 		err = services.RegisterJornalOperation(wj, log, record)
 		if err != nil {
 			request_data, _ := json.Marshal(record)
-			respDesc := fmt.Sprintf("Проблема при регистрации записи журнала %v", err)
-			responseWithError(respDesc, w, http.StatusInternalServerError)
+			responseWithError(err, w)
 			applog.Logger.Warn("Jornal registration error",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -18,8 +17,7 @@ func GetProfileHandler(ps services.ProfileStore) http.Handler {
 		id := params["id"]
 		numId, err := strconv.Atoi(id)
 		if err != nil {
-			respDesc := fmt.Sprintf("Не верный формат ID магазина. %v", err)
-			responseWithError(respDesc, w, http.StatusBadRequest)
+			responseWithError(err, w)
 			log.Logger.Error("Bad shop ID",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
@@ -29,8 +27,7 @@ func GetProfileHandler(ps services.ProfileStore) http.Handler {
 		}
 		profiles, err := services.GetProfiles(ps, numId)
 		if err != nil {
-			respDesc := fmt.Sprintf("Проблема при получении списка профилей %v", err)
-			responseWithError(respDesc, w, http.StatusInternalServerError)
+			responseWithError(err, w)
 			log.Logger.Error("Get profiles error",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),

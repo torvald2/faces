@@ -20,8 +20,7 @@ func GetImageHandler(ig services.ImageGetter) http.Handler {
 		id := params["id"]
 		numId, err := strconv.Atoi(id)
 		if err != nil {
-			respDesc := fmt.Sprintf("Не верный формат ID профиля. %v", err)
-			responseWithError(respDesc, w, http.StatusBadRequest)
+			responseWithError(err, w)
 			log.Logger.Error("Profile ID error",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
@@ -31,8 +30,7 @@ func GetImageHandler(ig services.ImageGetter) http.Handler {
 		}
 		image, err := ig.GetImage(numId)
 		if err != nil {
-			respDesc := fmt.Sprintf("Проблема при получении лица профиля %v", err)
-			responseWithError(respDesc, w, http.StatusInternalServerError)
+			responseWithError(err, w)
 			log.Logger.Error("Get Face error",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),

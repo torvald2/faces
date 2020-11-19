@@ -21,8 +21,7 @@ func GetRecognizeFaceHandler(ps services.ProfileStore) http.Handler {
 		rid := getRequestID(r.Context())
 		numId, err := strconv.Atoi(id)
 		if err != nil {
-			respDesc := fmt.Sprintf("Не верный формат номера магазина. %v", err)
-			responseWithError(respDesc, w, http.StatusBadRequest)
+			responseWithError(err, w)
 			log.Logger.Error("Bad shopID param",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
@@ -32,8 +31,7 @@ func GetRecognizeFaceHandler(ps services.ProfileStore) http.Handler {
 
 		bodyBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			respDesc := fmt.Sprintf("Failed to read body data  %v", err)
-			responseWithError(respDesc, w, http.StatusBadRequest)
+			responseWithError(err, w)
 			log.Logger.Error("Bad shopID param. Is not integer",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
@@ -43,13 +41,12 @@ func GetRecognizeFaceHandler(ps services.ProfileStore) http.Handler {
 		profile, err := services.RecognizeFace(ps, bodyBytes, rid, numId)
 		profile.ImageUrl = fmt.Sprintf("/images/%v", profile.Id)
 		if err != nil {
-			respDesc := fmt.Sprintf("Проблема при расспознании лица %v", err)
 			log.Logger.Warn("Face recognition error",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
 				zap.String("RequestID", rid),
 				zap.Error(err))
-			responseWithError(respDesc, w, http.StatusInternalServerError)
+			responseWithError(err, w)
 		} else {
 			responseOk(w, profile)
 			log.Logger.Debug("Response ok",
@@ -70,8 +67,7 @@ func GetNewFaceHandler(ps services.ProfileStore) http.Handler {
 		userName := r.FormValue("name")
 		numId, err := strconv.Atoi(id)
 		if err != nil {
-			respDesc := fmt.Sprintf("Не верный формат номера магазина. %v", err)
-			responseWithError(respDesc, w, http.StatusBadRequest)
+			responseWithError(err, w)
 			log.Logger.Error("Bad Shop Num",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
@@ -79,8 +75,7 @@ func GetNewFaceHandler(ps services.ProfileStore) http.Handler {
 			return
 		}
 		if utf8.RuneCountInString(userName) < 1 {
-			respDesc := fmt.Sprintf("Фио пользователя не должно быть пустым. %v", err)
-			responseWithError(respDesc, w, http.StatusBadRequest)
+			responseWithError(err, w)
 			log.Logger.Error("Bad user FIO",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
@@ -90,8 +85,7 @@ func GetNewFaceHandler(ps services.ProfileStore) http.Handler {
 
 		bodyBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			respDesc := fmt.Sprintf("Failed to read body data  %v", err)
-			responseWithError(respDesc, w, http.StatusBadRequest)
+			responseWithError(err, w)
 			log.Logger.Error("Failed to read body data",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
@@ -101,8 +95,7 @@ func GetNewFaceHandler(ps services.ProfileStore) http.Handler {
 		}
 		profile, err := services.CreateNewProfile(ps, bodyBytes, userName, numId, rid)
 		if err != nil {
-			respDesc := fmt.Sprintf("Проблема при расспознании лица %v", err)
-			responseWithError(respDesc, w, http.StatusBadRequest)
+			responseWithError(err, w)
 			log.Logger.Warn("Face recognition problem",
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
