@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
 
 	applog "atbmarket.comfaceapp/app_logger"
 	"atbmarket.comfaceapp/models"
@@ -49,6 +51,32 @@ func GetWorkJornalHandler(wj services.JornalRecorder, log services.Logger) http.
 				zap.String("Method", r.Method),
 				zap.String("URL", r.RequestURI),
 				zap.String("RequestID", rid))
+		}
+
+	})
+}
+
+func GetSendWorkJornalHandler(jg services.JornalGetter, rs services.ReportSender, sh services.SheetCreator) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		startDateTimestamp, err := strconv.ParseInt(r.FormValue("start"), 10, 64)
+		if err != nil {
+			responseWithError(err, w)
+			return
+		}
+		endDateTimestamp, err := strconv.ParseInt(r.FormValue("start"), 10, 64)
+		if err != nil {
+			responseWithError(err, w)
+			return
+		}
+		emails := r.FormValue("emails")
+
+		endDate := time.Unix(endDateTimestamp, 0)
+		startDate := time.Unix(startDateTimestamp, 0)
+		err = services.SendJornalByMail(startDate, endDate, emails, jg, rs, sh)
+		if err != nil {
+			responseWithError(err, w)
+		} else {
+			responseOk(w, "OK")
 		}
 
 	})

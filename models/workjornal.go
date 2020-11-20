@@ -25,6 +25,10 @@ type JornalOperation struct {
 }
 
 type JornalOperationDB struct {
+	UserName      string
+	ShopNum       string
+	OperationDete time.Time
+	OperationType OperationType
 }
 
 func (op *JornalOperation) UnmarshalJSON(data []byte) error {

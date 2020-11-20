@@ -1,6 +1,9 @@
 package services
 
 import (
+	"io"
+	"time"
+
 	"atbmarket.comfaceapp/models"
 )
 
@@ -25,3 +28,9 @@ type Logger interface {
 type FaceRecognizer interface {
 	GetUserIDByFace(image []byte) (userId int, err error)
 }
+type JornalGetter interface {
+	GetJornalRecords(start, end time.Time) (data []models.JornalOperationDB, err error)
+}
+
+type ReportSender = func(attatch io.Reader, attachName string, emails string) error
+type SheetCreator = func(operations []models.JornalOperationDB) (io.Reader, error)

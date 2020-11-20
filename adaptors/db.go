@@ -126,6 +126,31 @@ func (s Store) LogBadRequest(request models.BadRequest) error {
 	_, err = stmt.Exec(request.UserId, pg.Array(request.RecognizedUsers), request.CurrentFace, request.ErrorType, request.RecognizeTime, request.Shop, request.RequestId)
 	return err
 }
+func (s Store) GetJornalRecords(start, end time.Time) (data []models.JornalOperationDB, err error) {
+	stmt, err := s.db.Prepare(`SELECT wj.operation_type, wj.operation_date, pf.name, pf.shop_num
+                           FROM workjornal as wj
+                           JOIN profiles as pf 
+                           ON wj.profile_id = pf.id
+						   WHERE wj.operation_date BETWEEN '$1' AND '$2'`)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	rows, err := stmt.Query(start, end)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		op := models.JornalOperationDB{}
+		err = rows.Scan(&op.OperationType, &op.OperationDete, &op.UserName, &op.ShopNum)
+		if err != nil {
+			return
+		}
+		data = append(data, op)
+	}
+	return
+}
 func createTables(db *sql.DB) {
 	var tx *sql.Tx
 	var err error
