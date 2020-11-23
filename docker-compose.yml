@@ -14,6 +14,10 @@ services:
         TOLERANCE: 0.6
         IS_DEV: PRODUCTION
         RECOGNIZING_METHOD: CUSTOM
+        EMAIL_DOMAIN: smtp.gmail.com
+        EMAIL_PORT: 587
+        EMAIL_USER: kleptoman1989@gmail.com
+        EMAIL_PASSWORD: Cbvajybz2
     depends_on:
       - storage
   storage:
