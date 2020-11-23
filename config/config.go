@@ -17,7 +17,6 @@ type appConfig struct {
 	Tolerance          string `env:"TOLERANCE"`
 	RecognizionMethod  string `env:"RECOGNIZING_METHOD"`
 	Shops              string `env:"ACTIVE_SHOPS"`
-	Emails             string `env:"SEND_EMAILS"`
 	IsDev              string `env:"IS_DEV"`
 	EMailDomain        string `env:"EMAIL_DOMAIN"`
 	EMailPort          string `env:"EMAIL_PORT"`

@@ -35,7 +35,7 @@ func NewRouter() *mux.Router {
 	api.Handle("/profile/{id}", recognizeHandler).Methods("POST")
 	api.Handle("/profile/{id}/new", newProfileHandler).Methods("PUT")
 
-	api.Handle("/jornal/", getWorkJornal).Methods("GET")
+	api.Handle("/jornal", getWorkJornal).Methods("GET")
 	api.Handle("/jornal", jornalHandler).Methods("POST")
 
 	r.Handle("/images/{id}", imageHandler).Methods("GET")

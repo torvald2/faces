@@ -131,7 +131,7 @@ func (s Store) GetJornalRecords(start, end time.Time) (data []models.JornalOpera
                            FROM workjornal as wj
                            JOIN profiles as pf 
                            ON wj.profile_id = pf.id
-						   WHERE wj.operation_date BETWEEN '$1' AND '$2'`)
+						   WHERE wj.operation_date BETWEEN $1 AND $2`)
 	if err != nil {
 		return
 	}

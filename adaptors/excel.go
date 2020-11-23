@@ -23,7 +23,7 @@ func CreateSheet(operations []models.JornalOperationDB) (io.Reader, error) {
 		f.SetCellValue("Main", fmt.Sprintf("A%v", i+2), op.UserName)
 		f.SetCellValue("Main", fmt.Sprintf("B%v", i+2), op.ShopNum)
 		f.SetCellValue("Main", fmt.Sprintf("C%v", i+2), op.OperationDete.Format("2006.01.02"))
-		f.SetCellValue("Main", fmt.Sprintf("D%v", i+2), op.OperationDete.Format("03:04:05"))
+		f.SetCellValue("Main", fmt.Sprintf("D%v", i+2), op.OperationDete.Format("15:04:05"))
 		if op.OperationType == models.Coming {
 			f.SetCellValue("Main", fmt.Sprintf("E%v", i+2), "Приход")
 		} else {

@@ -63,7 +63,7 @@ func GetSendWorkJornalHandler(jg services.JornalGetter, rs services.ReportSender
 			responseWithError(err, w)
 			return
 		}
-		endDateTimestamp, err := strconv.ParseInt(r.FormValue("start"), 10, 64)
+		endDateTimestamp, err := strconv.ParseInt(r.FormValue("end"), 10, 64)
 		if err != nil {
 			responseWithError(err, w)
 			return

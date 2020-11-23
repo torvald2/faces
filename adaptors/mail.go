@@ -15,7 +15,7 @@ func SendReport(attatch io.Reader, attachName string, emails string) error {
 	conf := config.GetConfig()
 	mail := email.NewEmail()
 	mail.Subject = "Ежедневная рассылка Приход/Уход"
-	mail.From = "Эксперимент уход/приход"
+	mail.From = fmt.Sprintf("Эксперимент уход/приход <%v>", conf.EMailUser)
 	mail.To = strings.Split(emails, ",")
 	mail.Text = []byte("Ежедневный отчет по приходу уходу сотрудников во вложении")
 	if _, err := mail.Attach(attatch, attachName, content_type); err != nil {
