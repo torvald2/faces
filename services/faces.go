@@ -12,7 +12,7 @@ func RecognizeFace(ps ProfileStore, image []byte, requestId string, shopId int) 
 	if !ok {
 		return
 	}
-	profileId, err := recognozer.GetUserIDByFace(image)
+	profileId, err := recognozer.GetUserIDByFace(image, requestId)
 
 	if err != nil {
 		go func() {

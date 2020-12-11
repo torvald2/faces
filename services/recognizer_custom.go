@@ -4,12 +4,11 @@ import (
 	"math"
 	"strconv"
 
-	"go.uber.org/zap"
-
 	log "atbmarket.comfaceapp/app_logger"
 	"atbmarket.comfaceapp/config"
 	"atbmarket.comfaceapp/models"
 	fr "github.com/Kagami/go-face"
+	"go.uber.org/zap"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -20,32 +19,33 @@ type CustomRecognizer struct {
 	tolerance float32
 }
 
-func (r CustomRecognizer) GetUserIDByFace(image []byte) (userId int, err error) {
+func (r CustomRecognizer) GetUserIDByFace(image []byte, requestId string) (userId int, err error) {
 	face, err := r.getFace(image)
 	if err != nil {
 		return
 	}
 
-	userId = r.classify(face)
+	userId, dist := r.classify(face)
+
 	if userId < 0 {
 		return 0, UserNotFound{}
 	}
+	log.Logger.Debug("Distance", zap.String("RequestId", requestId), zap.Float64("Distance", dist))
 	return
 }
 
-func (r CustomRecognizer) classify(userVector *mat.VecDense) int {
+func (r CustomRecognizer) classify(userVector *mat.VecDense) (int, float64) {
 	for k, v := range r.samples {
 		w := mat.NewVecDense(128, nil)
 		w.SubVec(v, userVector)
 		d := mat.Dot(w, w)
 		dist := math.Sqrt(d)
-		log.Logger.Debug("Distance", zap.Float64("Distance", dist))
 		if float32(dist) < r.tolerance {
-			return k
+			return k, dist
 		}
 
 	}
-	return -1
+	return -1, 0.0
 
 }
 

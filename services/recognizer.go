@@ -42,7 +42,7 @@ type descriptor struct {
 	rec *fr.Recognizer
 }
 
-func (r Recognizer) GetUserIDByFace(image []byte) (userId int, err error) {
+func (r Recognizer) GetUserIDByFace(image []byte, requestId string) (userId int, err error) {
 	face, err := r.getFace(image)
 	if err != nil {
 		return

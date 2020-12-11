@@ -26,7 +26,7 @@ type Logger interface {
 }
 
 type FaceRecognizer interface {
-	GetUserIDByFace(image []byte) (userId int, err error)
+	GetUserIDByFace(image []byte, requestId string) (userId int, err error)
 }
 type JornalGetter interface {
 	GetJornalRecords(start, end time.Time) (data []models.JornalOperationDB, err error)
