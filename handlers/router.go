@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"net/http"
 
 	"atbmarket.comfaceapp/adaptors"
 	"atbmarket.comfaceapp/services"
@@ -42,6 +43,8 @@ func NewRouter() *mux.Router {
 	api.Handle("/badrequest", badRequestsHandler).Methods("GET")
 
 	r.Handle("/images/{id}", imageHandler).Methods("GET")
+
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
 	return r
 
