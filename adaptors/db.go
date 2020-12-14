@@ -151,6 +151,30 @@ func (s Store) GetJornalRecords(start, end time.Time) (data []models.JornalOpera
 	}
 	return
 }
+
+func (s Store) GetBadRequests(dateFrom, dateTo time.Time) (data []models.BadRequest, err error) {
+	stmt, err := s.db.Prepare("SELECT  profile_id, recognized_profiles, current_face, error_type FROM badrequest WHERE created_date BETWEEN $1 AND $2")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(dateFrom, dateTo)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		record := models.BadRequest{}
+		err = rows.Scan(&record.UserId, pg.Array(&record.RecognizedUsers), &record.CurrentFace, &record.ErrorType)
+		if err != nil {
+			return
+		}
+		data = append(data, record)
+	}
+	return
+}
+
 func createTables(db *sql.DB) {
 	var tx *sql.Tx
 	var err error

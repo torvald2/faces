@@ -26,6 +26,7 @@ func NewRouter() *mux.Router {
 	jornalHandler := GetWorkJornalHandler(store, store)
 	profileListHandler := GetProfileHandler(store)
 	getWorkJornal := GetSendWorkJornalHandler(store, adaptors.SendReport, adaptors.CreateSheet)
+	badRequestsHandler := GetBadRequestHandler(store)
 
 	r.Use(getReqIdMidelware)
 
@@ -37,6 +38,8 @@ func NewRouter() *mux.Router {
 
 	api.Handle("/jornal", getWorkJornal).Methods("GET")
 	api.Handle("/jornal", jornalHandler).Methods("POST")
+
+	api.Handle("/badrequest", badRequestsHandler).Methods("GET")
 
 	r.Handle("/images/{id}", imageHandler).Methods("GET")
 

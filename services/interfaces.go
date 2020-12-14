@@ -32,5 +32,9 @@ type JornalGetter interface {
 	GetJornalRecords(start, end time.Time) (data []models.JornalOperationDB, err error)
 }
 
+type BadRequestsGetter interface {
+	GetBadRequests(dateFrom, dateTo time.Time) (data []models.BadRequest, err error)
+}
+
 type ReportSender = func(attatch io.Reader, attachName string, emails string) error
 type SheetCreator = func(operations []models.JornalOperationDB) (io.Reader, error)
