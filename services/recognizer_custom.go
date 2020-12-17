@@ -69,6 +69,25 @@ func (r CustomRecognizer) GetShopId() int {
 	return r.shopId
 }
 
+func GetDistance(profileId1, profileId2 int, s ProfileStore) (d float64, err error) {
+	profile1, err := s.GetProfileById(profileId1)
+	if err != nil {
+		return
+	}
+	profile2, err := s.GetProfileById(profileId2)
+	if err != nil {
+		return
+	}
+
+	v1 := mat.NewVecDense(128, profile1.Descriptor)
+	v2 := mat.NewVecDense(128, profile2.Descriptor)
+	w := mat.NewVecDense(128, nil)
+	w.SubVec(v1, v2)
+	disc := mat.Dot(w, w)
+	d = math.Sqrt(disc)
+	return
+}
+
 func NewCustomRecognizer(data []models.Profile, shopId int) (rec CustomRecognizer, err error) {
 	conf := config.GetConfig()
 	samples := make(map[int]*mat.VecDense)

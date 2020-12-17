@@ -143,6 +143,7 @@ func (s Store) GetJornalRecords(start, end time.Time) (data []models.JornalOpera
 	defer rows.Close()
 	for rows.Next() {
 		op := models.JornalOperationDB{}
+
 		err = rows.Scan(&op.OperationType, &op.OperationDete, &op.UserName, &op.ShopNum)
 		if err != nil {
 			return
@@ -153,7 +154,13 @@ func (s Store) GetJornalRecords(start, end time.Time) (data []models.JornalOpera
 }
 
 func (s Store) GetBadRequests(dateFrom, dateTo time.Time) (data []models.BadRequest, err error) {
-	stmt, err := s.db.Prepare("SELECT  profile_id, recognized_profiles, current_face, error_type FROM badrequest WHERE created_date BETWEEN $1 AND $2")
+	stmt, err := s.db.Prepare(`SELECT  id,
+							   profile_id,
+							   COALESCE(recognized_profiles, array[]::bigint[])
+							   recognized_profiles,
+							   error_type,
+							   recognized_time
+							   FROM badrequest WHERE created_date BETWEEN $1 AND $2`)
 	if err != nil {
 		return
 	}
@@ -165,14 +172,42 @@ func (s Store) GetBadRequests(dateFrom, dateTo time.Time) (data []models.BadRequ
 	}
 	defer rows.Close()
 	for rows.Next() {
+		var ru pg.Int64Array
 		record := models.BadRequest{}
-		err = rows.Scan(&record.UserId, pg.Array(&record.RecognizedUsers), &record.CurrentFace, &record.ErrorType)
+		err = rows.Scan(&record.Id, &record.UserId, &ru, &record.ErrorType, &record.RecognizeTime)
 		if err != nil {
 			return
 		}
+		r := []int64(ru)
+		var recognizedUsers []int
+		for _, v := range r {
+			recognizedUsers = append(recognizedUsers, int(v))
+
+		}
+		record.RecognizedUsers = recognizedUsers
 		data = append(data, record)
 	}
 	return
+}
+
+func (s Store) GetBadRequestImage(recordId int) (data []byte, err error) {
+	var rawData interface{}
+	stmt, err := s.db.Prepare("SELECT current_face FROM badrequest WHERE id=$1 ")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	row := stmt.QueryRow(recordId)
+	err = row.Scan(&rawData)
+	if err != nil {
+		return
+	}
+	data, ok := rawData.([]byte)
+	if !ok {
+		return nil, fmt.Errorf("Type assertion problem interface{} to []byte")
+	}
+	return
+
 }
 
 func createTables(db *sql.DB) {

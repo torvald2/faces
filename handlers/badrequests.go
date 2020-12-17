@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 	"time"
 
 	"atbmarket.comfaceapp/services"
@@ -10,19 +9,17 @@ import (
 
 func GetBadRequestHandler(br services.BadRequestsGetter) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		startDateTimestamp, err := strconv.ParseInt(r.FormValue("start"), 10, 64)
+		startDate, err := time.Parse("2006-01-02", r.FormValue("start"))
 		if err != nil {
 			responseWithError(err, w)
 			return
 		}
-		endDateTimestamp, err := strconv.ParseInt(r.FormValue("end"), 10, 64)
+		endDate, err := time.Parse("2006-01-02", r.FormValue("end"))
 		if err != nil {
 			responseWithError(err, w)
 			return
 		}
 
-		endDate := time.Unix(endDateTimestamp, 0)
-		startDate := time.Unix(startDateTimestamp, 0)
 		data, err := services.GetBadRequests(startDate, endDate, br)
 		if err != nil {
 			responseWithError(err, w)

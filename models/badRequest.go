@@ -17,13 +17,14 @@ const (
 )
 
 type BadRequest struct {
-	UserId          int
-	RecognizedUsers []int
-	CurrentFace     []byte
-	RecognizeTime   time.Time
-	Shop            int
-	RequestId       string
-	ErrorType       BadRequestType
+	Id              int            `json:"record_id"`
+	UserId          int            `json:"user_id"`
+	RecognizedUsers []int          `json:"recognized_users"`
+	CurrentFace     []byte         `json:"-"`
+	RecognizeTime   time.Time      `json:"recognize_time"`
+	Shop            int            `json:"shop_id"`
+	RequestId       string         `json:"request_id"`
+	ErrorType       BadRequestType `json:"error_type"`
 }
 
 func (br *BadRequest) UnmarshalJSON(data []byte) error {

@@ -28,6 +28,8 @@ func NewRouter() *mux.Router {
 	profileListHandler := GetProfileHandler(store)
 	getWorkJornal := GetSendWorkJornalHandler(store, adaptors.SendReport, adaptors.CreateSheet)
 	badRequestsHandler := GetBadRequestHandler(store)
+	distanceHandler := GetDistanceHandler(store)
+	badImageHandler := GetBadRequestImageHandler(store)
 
 	r.Use(getReqIdMidelware)
 
@@ -42,7 +44,10 @@ func NewRouter() *mux.Router {
 
 	api.Handle("/badrequest", badRequestsHandler).Methods("GET")
 
+	api.Handle("/distance", distanceHandler).Methods("GET")
+
 	r.Handle("/images/{id}", imageHandler).Methods("GET")
+	r.Handle("/imagesrequest/{id}", badImageHandler).Methods("GET")
 
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 

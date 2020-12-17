@@ -16,6 +16,7 @@ type ProfileStore interface {
 
 type ImageGetter interface {
 	GetImage(profileId int) (data []byte, err error)
+	GetBadRequestImage(recordId int) (data []byte, err error)
 }
 
 type JornalRecorder interface {
