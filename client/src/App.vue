@@ -1,28 +1,22 @@
-<template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+<template lang="pug">
+div
+  b-navbar(toggleable="lg" type="dark" variant="info")
+    b-navbar-brand Отчеты системы регистрации прихода/ухода
+    b-navbar-nav Отчет об ошибках
+  b-container
+    report
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import report from './components/ErrorReport.vue'
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    report,
+  },
+ 
+
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
