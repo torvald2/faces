@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:oldstable
 
 
 ##RUN  echo "deb http://ftp.uk.debian.org/debian/ unstable main" |  tee -a /etc/apt/sources.list
