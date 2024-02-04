@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -9,15 +10,19 @@ import (
 	"time"
 
 	applog "atbmarket.comfaceapp/app_logger"
-	"atbmarket.comfaceapp/models"
 	"go.uber.org/zap"
 
 	"atbmarket.comfaceapp/services"
 )
 
-func GetWorkJornalHandler(wj services.JornalRecorder, log services.Logger) http.Handler {
+type DistanceRequest struct {
+	Doc   string `json:"doc"`
+	Photo string `json:"photo"`
+}
+
+func DiscHandler(processor services.Descriptor) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var record models.JornalOperation
+		var record DistanceRequest
 		rid := getRequestID(r.Context())
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&record)
@@ -34,24 +39,46 @@ func GetWorkJornalHandler(wj services.JornalRecorder, log services.Logger) http.
 			return
 		}
 
-		err = services.RegisterJornalOperation(wj, log, record)
+		img1Bytes, err := base64.StdEncoding.DecodeString(record.Doc)
 		if err != nil {
-			request_data, _ := json.Marshal(record)
+
 			responseWithError(err, w)
-			applog.Logger.Warn("Jornal registration error",
-				zap.String("Method", r.Method),
-				zap.String("URL", r.RequestURI),
-				zap.String("RequestID", rid),
-				zap.String("Data", string(request_data)),
-				zap.Error(err))
+
 			return
-		} else {
-			responseOk(w, nil)
-			applog.Logger.Debug("Response ok",
-				zap.String("Method", r.Method),
-				zap.String("URL", r.RequestURI),
-				zap.String("RequestID", rid))
 		}
+		img2Bytes, err := base64.StdEncoding.DecodeString(record.Photo)
+		if err != nil {
+
+			responseWithError(err, w)
+
+			return
+		}
+
+		dist1, err := processor.GetNewFaceDescriptor(img1Bytes)
+		if err != nil {
+
+			responseWithError(err, w)
+
+			return
+		}
+
+		dist2, err := processor.GetNewFaceDescriptor(img2Bytes)
+		if err != nil {
+
+			responseWithError(err, w)
+
+			return
+		}
+		dd, err := services.GetProfDistance(dist1, dist2)
+
+		if err != nil {
+
+			responseWithError(err, w)
+
+			return
+		}
+
+		responseOk(w, map[string]interface{}{"dist": dd})
 
 	})
 }

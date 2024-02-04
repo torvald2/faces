@@ -18,15 +18,4 @@ services:
         EMAIL_PORT: 587
         EMAIL_USER: kleptoman1989@gmail.com
         EMAIL_PASSWORD: Cbvajybz2
-    depends_on:
-      - storage
-  storage:
-    image: postgres
-    ports:
-      - "5432:5432"
-    environment: 
-        POSTGRES_PASSWORD: Cbvajybz13
-    volumes:
-        - ./pgdata:/var/lib/postgresql/data:z
-        - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
-
+ 
