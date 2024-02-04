@@ -17,9 +17,7 @@ RUN apt-get install git -y
 
 
 
-RUN curl -O https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz 
-RUN  tar -xvf go1.14.2.linux-amd64.tar.gz
-RUN  mv go /usr/local
+RUN apt install golang
 
 
 RUN  apt-get install libdlib-dev -y
