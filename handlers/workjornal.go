@@ -16,8 +16,9 @@ import (
 )
 
 type DistanceRequest struct {
-	Doc   string `json:"doc"`
-	Photo string `json:"photo"`
+	Doc          string `json:"doc"`
+	Photo        string `json:"photo"`
+	ReturnVector bool   `json:"return_vector"`
 }
 
 func DiscHandler(processor services.Descriptor) http.Handler {
@@ -46,6 +47,18 @@ func DiscHandler(processor services.Descriptor) http.Handler {
 
 			return
 		}
+		if record.ReturnVector {
+			dist1, err := processor.GetNewFaceDescriptor(img1Bytes)
+			if err != nil {
+
+				responseWithError(err, w)
+
+				return
+			}
+			responseOk(w, map[string]interface{}{"data": dist1})
+			return
+		}
+
 		img2Bytes, err := base64.StdEncoding.DecodeString(record.Photo)
 		if err != nil {
 
