@@ -16,9 +16,11 @@ import (
 )
 
 type DistanceRequest struct {
-	Doc          string `json:"doc"`
-	Photo        string `json:"photo"`
-	ReturnVector bool   `json:"return_vector"`
+	Doc                string    `json:"doc"`
+	Photo              string    `json:"photo"`
+	ReturnVector       bool      `json:"return_vector"`
+	ComparePhotoVector bool      `json:"compare_photo_vector"`
+	Vector             []float64 `json:"vector"`
 }
 
 func DiscHandler(processor services.Descriptor) http.Handler {
@@ -57,6 +59,25 @@ func DiscHandler(processor services.Descriptor) http.Handler {
 			}
 			responseOk(w, map[string]interface{}{"data": dist1})
 			return
+		}
+		if record.ComparePhotoVector {
+
+			dist1, err := processor.GetNewFaceDescriptor(img1Bytes)
+			if err != nil {
+
+				responseWithError(err, w)
+
+				return
+			}
+
+			dd, err := services.GetProfDistance(dist1, record.Vector)
+			if err != nil {
+				responseWithError(err, w)
+				return
+			}
+			responseOk(w, map[string]interface{}{"dist": dd})
+			return
+
 		}
 
 		img2Bytes, err := base64.StdEncoding.DecodeString(record.Photo)
