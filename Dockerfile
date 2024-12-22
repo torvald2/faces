@@ -35,7 +35,6 @@ WORKDIR /app
 RUN apt-get install build-essential -y
 
 ENV PATH=$PATH:/usr/local/go/bin
-RUN  go get -u gonum.org/v1/gonum
 RUN go mod download
 RUN export CPATH="/usr/include/hdf5/serial/"
 RUN go build -v main.go
