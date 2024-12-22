@@ -1,8 +1,7 @@
 module atbmarket.comfaceapp
 
-go 1.22.0
+go 1.22
 
-toolchain go1.23.3
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
