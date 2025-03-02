@@ -1,44 +1,29 @@
-FROM debian
+FROM debian:latest
 
+RUN apt-get update -y && apt-get install -y \
+    curl \
+    git \
+    build-essential \
+    libdlib-dev \
+    libblas-dev \
+    liblapack-dev \
+    libjpeg62-turbo-dev
 
-##RUN  echo "deb http://ftp.uk.debian.org/debian/ unstable main" |  tee -a /etc/apt/sources.list
-RUN  apt-get update -y
-RUN  apt-get install software-properties-common -y
+# Устанавливаем последнюю версию Go
+ENV GO_VERSION=1.21.5
+RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz
 
-RUN apt-get install curl -y
-RUN apt-get install git -y
-
-
-
-RUN apt-get install golang -y
-
-
-RUN  apt-get install libdlib-dev -y
-RUN  apt-get install libblas-dev  -y
-RUN  apt-get install liblapack-dev  -y
-RUN  apt-get install libjpeg62-turbo-dev -y
-
+# Обновляем переменные окружения
+ENV PATH="/usr/local/go/bin:${PATH}"
 ENV GOOS=linux
-ENV GOARCH=amd64 
-
-RUN mkdir app
-COPY . /app
+ENV GOARCH=amd64
 
 WORKDIR /app
-RUN apt-get install build-essential -y
+COPY . /app
 
-ENV PATH=$PATH:/usr/local/go/bin
 RUN go mod download
-RUN export CPATH="/usr/include/hdf5/serial/"
-RUN go build -v main.go
+RUN export CPATH="/usr/include/hdf5/serial/" && go build -v -o main main.go
 
-ENTRYPOINT /app/main
+ENTRYPOINT ["/app/main"]
 EXPOSE 8080
-
-
-
-
-
-
-
 
