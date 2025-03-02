@@ -18,6 +18,5 @@ require (
 
 require (
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
-	go.uber.org/multierr v1.10.0 // indirect
-	golang.org/x/exp v0.0.0-20250228200357-dead58393ab7 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 )
