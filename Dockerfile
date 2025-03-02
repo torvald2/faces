@@ -10,7 +10,7 @@ RUN apt-get update -y && apt-get install -y \
     libjpeg62-turbo-dev
 
 # Устанавливаем последнюю версию Go
-ENV GO_VERSION=1.23
+ENV GO_VERSION=1.24.0
 RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz
 
 # Обновляем переменные окружения
