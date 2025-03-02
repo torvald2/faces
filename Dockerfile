@@ -9,9 +9,11 @@ RUN apt-get update -y && apt-get install -y \
     liblapack-dev \
     libjpeg62-turbo-dev
 
+# Устанавливаем последнюю версию Go
 ENV GO_VERSION=1.21.5
 RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz
 
+# Обновляем переменные окружения
 ENV PATH="/usr/local/go/bin:${PATH}"
 ENV GOOS=linux
 ENV GOARCH=amd64
@@ -25,3 +27,4 @@ RUN export CPATH="/usr/include/hdf5/serial/" && go build -v -o main main.go
 
 ENTRYPOINT ["/app/main"]
 EXPOSE 8080
+
