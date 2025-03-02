@@ -17,6 +17,7 @@ RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /us
 ENV PATH="/usr/local/go/bin:${PATH}"
 ENV GOOS=linux
 ENV GOARCH=amd64
+ENV GOTOOLCHAIN=local  # Отключаем автоматическое скачивание toolchain
 
 WORKDIR /app
 COPY . /app
@@ -26,4 +27,3 @@ RUN export CPATH="/usr/include/hdf5/serial/" && go build -v -o main main.go
 
 ENTRYPOINT ["/app/main"]
 EXPOSE 8080
-
