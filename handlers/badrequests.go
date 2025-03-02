@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"atbmarket.comfaceapp/services"
+	"github.com/torvald2/faces/services"
 )
 
 func GetBadRequestHandler(br services.BadRequestsGetter) http.Handler {

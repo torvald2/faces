@@ -1,4 +1,4 @@
-module atbmarket.comfaceapp
+module github.com/torvald2/faces
 
 go 1.23
 
@@ -16,7 +16,6 @@ require (
 
 require (
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
-	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20241217172543-b2144cdd0a67 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
+	golang.org/x/exp v0.0.0-20250228200357-dead58393ab7 // indirect
 )

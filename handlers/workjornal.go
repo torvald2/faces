@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	applog "atbmarket.comfaceapp/app_logger"
+	applog "github.com/torvald2/faces/app_logger"
 	"go.uber.org/zap"
 
-	"atbmarket.comfaceapp/services"
+	"github.com/torvald2/faces/services"
 )
 
 type DistanceRequest struct {

@@ -4,10 +4,10 @@ import (
 	"math"
 	"strconv"
 
-	"atbmarket.comfaceapp/config"
-	"atbmarket.comfaceapp/models"
 	"github.com/Kagami/go-face"
 	fr "github.com/Kagami/go-face"
+	"github.com/torvald2/faces/config"
+	"github.com/torvald2/faces/models"
 	"gonum.org/v1/gonum/mat"
 )
 

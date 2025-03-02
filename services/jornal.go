@@ -3,7 +3,7 @@ package services
 import (
 	"time"
 
-	"atbmarket.comfaceapp/models"
+	"github.com/torvald2/faces/models"
 )
 
 func RegisterJornalOperation(j JornalRecorder, log Logger, operation models.JornalOperation) error {

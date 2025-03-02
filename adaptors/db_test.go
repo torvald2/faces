@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"atbmarket.comfaceapp/models"
+	"github.com/torvald2/faces/models"
 
 	"github.com/joho/godotenv"
 )

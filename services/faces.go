@@ -3,7 +3,7 @@ package services
 import (
 	"time"
 
-	"atbmarket.comfaceapp/models"
+	"github.com/torvald2/faces/models"
 )
 
 func RecognizeFace(ps ProfileStore, image []byte, requestId string, shopId int) (profile models.Profile, err error) {

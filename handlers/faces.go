@@ -9,9 +9,9 @@ import (
 
 	"go.uber.org/zap"
 
-	log "atbmarket.comfaceapp/app_logger"
-	"atbmarket.comfaceapp/services"
 	"github.com/gorilla/mux"
+	log "github.com/torvald2/faces/app_logger"
+	"github.com/torvald2/faces/services"
 )
 
 func GetRecognizeFaceHandler(ps services.ProfileStore) http.Handler {

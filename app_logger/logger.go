@@ -1,7 +1,7 @@
 package app_logger
 
 import (
-	"atbmarket.comfaceapp/config"
+	"github.com/torvald2/faces/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

@@ -6,8 +6,8 @@ import (
 	"net/smtp"
 	"strings"
 
-	"atbmarket.comfaceapp/config"
 	"github.com/jordan-wright/email"
+	"github.com/torvald2/faces/config"
 )
 
 func SendReport(attatch io.Reader, attachName string, emails string) error {

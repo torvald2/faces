@@ -8,9 +8,9 @@ import (
 	"os/signal"
 	"time"
 
-	log "atbmarket.comfaceapp/app_logger"
-	"atbmarket.comfaceapp/config"
-	"atbmarket.comfaceapp/handlers"
+	log "github.com/torvald2/faces/app_logger"
+	"github.com/torvald2/faces/config"
+	"github.com/torvald2/faces/handlers"
 	"go.uber.org/zap"
 )
 

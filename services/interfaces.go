@@ -4,7 +4,7 @@ import (
 	"io"
 	"time"
 
-	"atbmarket.comfaceapp/models"
+	"github.com/torvald2/faces/models"
 )
 
 type ProfileStore interface {

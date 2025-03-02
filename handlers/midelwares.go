@@ -6,8 +6,8 @@ import (
 
 	"go.uber.org/zap"
 
-	log "atbmarket.comfaceapp/app_logger"
 	"github.com/google/uuid"
+	log "github.com/torvald2/faces/app_logger"
 )
 
 type ReqIdKey string

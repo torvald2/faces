@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strconv"
 
-	log "atbmarket.comfaceapp/app_logger"
-	"atbmarket.comfaceapp/services"
 	"github.com/gorilla/mux"
+	log "github.com/torvald2/faces/app_logger"
+	"github.com/torvald2/faces/services"
 	"go.uber.org/zap"
 )
 

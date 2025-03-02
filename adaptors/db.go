@@ -8,9 +8,9 @@ import (
 
 	"go.uber.org/zap"
 
-	log "atbmarket.comfaceapp/app_logger"
-	"atbmarket.comfaceapp/config"
-	"atbmarket.comfaceapp/models"
+	log "github.com/torvald2/faces/app_logger"
+	"github.com/torvald2/faces/config"
+	"github.com/torvald2/faces/models"
 
 	pg "github.com/lib/pq"
 )

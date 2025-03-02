@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"atbmarket.comfaceapp/services"
 	"github.com/gorilla/mux"
+	"github.com/torvald2/faces/services"
 )
 
 func NewRouter() *mux.Router {

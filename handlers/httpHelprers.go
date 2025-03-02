@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"atbmarket.comfaceapp/models"
-	"atbmarket.comfaceapp/services"
+	"github.com/torvald2/faces/models"
+	"github.com/torvald2/faces/services"
 )
 
 func responseWithError(err error, w http.ResponseWriter) {

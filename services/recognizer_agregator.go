@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"atbmarket.comfaceapp/config"
+	"github.com/torvald2/faces/config"
 )
 
 type RecognizeAgg struct {
