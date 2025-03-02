@@ -6,7 +6,7 @@ RUN apt-get update -y && apt-get install -y \
     libblas-dev \
     libatlas-base-dev \
     liblapack-dev \
-    libjpeg-turbo-dev \
+    libjpeg62-turbo-dev \
     libhdf5-dev \
     build-essential \
     git
