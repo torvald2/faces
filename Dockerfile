@@ -4,8 +4,9 @@ FROM golang:1.23
 RUN apt-get update -y && apt-get install -y \
     libdlib-dev \
     libblas-dev \
+    libatlas-base-dev \
     liblapack-dev \
-    libjpeg62-turbo-dev \
+    libjpeg-turbo-dev \
     libhdf5-dev \
     build-essential \
     git
