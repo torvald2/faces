@@ -12,6 +12,7 @@ RUN apt-get update -y && apt-get install -y \
 # Устанавливаем последнюю версию Go
 ENV GO_VERSION=1.24.0
 RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz
+RUN apt-get install -y libhdf5-dev
 
 # Обновляем переменные окружения
 ENV PATH="/usr/local/go/bin:${PATH}"
