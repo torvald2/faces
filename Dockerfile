@@ -1,4 +1,4 @@
-FROM golang:1.23-buster
+FROM golang:1.23
 
 # Устанавливаем необходимые библиотеки и зависимости
 RUN apt-get update -y && apt-get install -y \
