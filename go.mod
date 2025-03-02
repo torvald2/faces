@@ -1,8 +1,7 @@
 module github.com/torvald2/faces
 
-go 1.23.0
+go 1.23
 
-toolchain go1.23.3
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
