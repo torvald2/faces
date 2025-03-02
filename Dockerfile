@@ -24,7 +24,7 @@ WORKDIR /app
 COPY . /app
 
 RUN go mod download
-RUN export CPATH="/usr/include/hdf5/serial/" && go build -v -o main main.go
+RUN go build -v -o main main.go
 
 ENTRYPOINT ["/app/main"]
 EXPOSE 8080
